@@ -1,0 +1,35 @@
+# CHILANDAU — SPR-KKR 9.7 / ASE2SPRKKR
+
+Stav k **9. listopadu 2026**. Autoritou jsou zdroje SPR-KKR 9.7 **PUB9.7_260420_18h13**; rozhraní je ověřeno v ASE2SPRKKR `49d7d0f1254dbc98cd7ae9a483b28747ddbe9bf6`. [Zdrojový základ a společné ověření](SPRKKR-ASE2SPRKKR-common-audit.md#zdrojový-základ-a-platnost).
+
+| Task | Schéma | Program | MPI | Experimental | Reader |
+|---|---|---|---|---|---|
+| CHILANDAU | CHILANDAU | kkrchi | false | true | obecný |
+
+Landauova orbitální magnetická susceptibilita. Rozhraní vystavuje sériovou periodickou ASA/FREL cestu; MPI a reuse přes RDTAUFIL mají níže doložené chyby.
+
+## Definice a validace
+
+Executable kkrchi; nativní INITVAR rozpoznává CHILANDAU, RSP volá SUSC_LANDAU. Definice obsahuje CONTROL, TAU, MODE, CPA, STRCONST, ENERGY, TASK a SITES; minimální volitelná SCF sekce umožňuje odmítnout FULLPOT, který RSP explicitně zakazuje.
+
+Vyžadován BZINT=POINTS (native IBZINT=2), jeden GRID=5 kontur bez SPLITSS a kladný počet energií. SUSC_LANCALC jinak při NEPATH!=1 nebo GRID!=5 tiše vrací bez výpočtu. Stejně vrací při KMROT!=0; KMROT je vlastnost nativního stavu/potenciálu a tato definice jej nezjišťuje. FREL je omezení auditovaného postupu: angular a wavefunction rutiny používají relativistické CGC a spinorové kanály, nejde o nalezený explicitní STOP pro všechny ostatní režimy. NONMAG je přípustný — nejde o spinovou susceptibilitu vyžadující magnetický základní stav.
+
+TASK obsahuje CLURAD, NSHLCLU, SELECT, EXCLUDE, QREPONLY a PRINT. SELECT/EXCLUDE jsou vzájemně výlučné; radius je konečný nezáporný. NSHLCLU včetně nuly má přednost před radiem. Definice nenabízí všechny možné nativní modifikace výpočtu.
+
+## Defaults
+
+**Vypsané:** GRID=5, NE=30, ImE=0.01, EMIN=−0.2 a CLURAD=2.2. Jde o explicitní praktické volby ASE; počet bodů a radius vyžadují konvergenci. Nativní INIT_MOD_TAUIJ_STAR nemá použitelný default radiusu: bez CLURAD i NSHLCLU končí STOP. Proto je vypsaný radius lepší než jeho vynechání, ale hodnota 2.2 není fyzikální zárukou konvergence.
+
+**Nevypsané:** EMAX je skutečně ponecháno nativnímu EF; QREPONLY=False souhlasí s MOD_SITES.TREAT_QREP_ONLY=False. NSHLCLU není vnuceno na nulu, protože jeho pouhá přítomnost mění výběr clusteru. PRINT je nezadaný: SUSC_LANDAU po inicializaci nastavuje IPRINT=0 a z něj odvozuje CHIPRINT. FULLPOT=False není vypsán; pokud potenciál sám aktivuje FULLPOT, native RSP jej i tak odmítne. Python default sám nepřepíná full-potential potenciál na ASA.
+
+## Konkrétní chyby a omezení nativních zdrojů
+
+1. **MPI: neinicializovaná pole.** SUSC_LANCALC alokuje SAVE angular pole pouze při IECURR=1. SUSC_LANDAU přitom dělí energie mezi ranky. Rank počítající jiné energie nemá tato pole alokovaná (susc_lancalc.f:66–88; susc_landau.f:193–214).
+2. **MPI: redukce za koncem pole.** CHILANLT má tvar (0:NLMAX,NTMAX,2), ale MPI_SUM_R začíná na CHILANLT(0,1,2) a předává délku obou bloků. Od začátku druhého bloku zbývá pouze polovina požadované délky (susc_landau.f, blok finálního MPI součtu). To je nezávislá paměťová chyba. mpi=False je proto záměrný default definice; explicitní vynucení MPI přes calculator tuto chybu neopraví.
+3. **Průběžné výstupy.** Podmínka IECURR.LT.-NETAB(1) v SUSC_LANCALC je pro kladné energetické indexy vždy nepravdivá. Výstup susceptibilit se tiskne při každé energii, nikoli až na konci. V sériovém běhu je nutné použít poslední blok; dřívější bloky jsou pouze částečné integrály.
+4. **Čtecí TAU větev.** RDTAUFIL otevře a přečte hlavičku textového souboru, ale v energetické smyčce chybí odpovídající čtení TAU a výpočet TAU je při RDTAUFIL přeskočen. Tento reuse postup není touto definicí nabízen ani certifikován.
+5. Výpočet používá konečný součet sousedů a konkrétní kartézské složky. Konvergenci, geometrický rozsah, násobnosti při QREPONLY a interpretaci pro obecnou anisotropii je potřeba ověřit. Nižší dimensionalita a nestandardní rotační stavy nejsou tímto auditem pokryty.
+
+## Ověření
+
+Aktuální regresní moduly: `test_chilandau.py`. Jsou součástí společně ověřené sady vstupních parametrů a result_files (**1249 passed, 1 skipped**, 9. 11. 2026). Testy vstupu ověřují rozhraní a serializaci; necertifikují fyzikální hodnoty ani shodu serial/MPI. Samostatný numerický referenční výpočet tohoto tasku zde ověřen nebyl.
