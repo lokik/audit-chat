@@ -18,64 +18,64 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 
 ## Index
 
-| Task | Status (short) | In manual |
+| Task | Operational status | Manual coverage |
 |---|---|---|
-| [`AES`](#aes) | Works only in the limited audited workflow; NQ=1, no f shells, with cache/TAU-capacity risks | Yes |
-| [`AIPES`](#aipes) | Works in the audited fixed-geometry workflow; it is not numerical angular integration of ARPES | Yes |
-| [`APS`](#aps) | Works with a compatible old-format DOS; positive-`GAMMA` broadening follows a problematic native branch | Yes |
-| [`ARPES`](#arpes) | Works, but the current definition retains native, presence-sensitive `CRYS_VECS` supported; low-level/expert branches are not all certified | Yes |
-| [`BAND`](#band) | Works in the audited workflow; an eigen-solver failure may continue natively as far as `LOG(0)` | Yes |
-| [`BONDING`](#bonding) | Broken: normal `TAU_DRIVE` prepares `KTAUIJ=0`, while `CLUBONDING` reads scratch units requiring `KTAUIJ>=2` | No |
-| [`BSDOSIJ`](#bsdosij) | Broken: native `J_ITJT` is written with energy indices into pair dimensions and later read in a different order | No |
-| [`BSF`](#bsf) | Schema only; native BSF works; the E-k default `EMAX=-1 Ry` is a suspicious convenience default and need not mean EF | Yes |
-| [`BSFEK`](#bsfek) | Works like `BSF`; the alias only preselects the expected E-k mode through `ENERGY.NE` | Yes, as `BSF`; `BSFEK` is an ASE2SPRKKR alias |
-| [`BSFKK`](#bsfkk) | Works like `BSF`; the alias only preselects the expected single-energy k-k mode | Yes, as `BSF`; `BSFKK` is an ASE2SPRKKR alias |
-| [`CHI`](#chi) | Works in the audited static workflow; native `NCHIITER` is forcibly reset to 1 before the loop, so the iterative magnetization part does not actually run | Yes |
-| [`CHILANDAU`](#chilandau) | Works serially with limitations; MPI and `RDTAUFIL` reuse are broken, and native finish logic prints partial sums | No |
-| [`CHIXAS`](#chixas) | Works only with physically consistent external `NEF/CHISPN/CHIVV`; no universally safe defaults exist | No |
-| [`CLPES`](#clpes) | Works in the audited serial fixed-geometry workflow; CPA and some polarization modes stop natively, and `NE=1` requires a valid core-state index | No |
-| [`CLXPS`](#clxps) | Works in the audited ASA/FREL workflow; advanced angular geometries and numerical output were not independently certified | Yes |
-| [`COMPTON`](#compton) | Works with limitations; `EMD2D` double-scales nonzero `PNMAX`, and shifted even grids lose endpoints | Yes |
-| [`DMI`](#dmi) | Works with significant caveats: native DMI components are not equivalent (especially Dz), and frame/multiplicity/radius must be checked | No as a separate task in the available manual; JXC is documented |
-| [`DOS`](#dos) | Works | Yes |
-| [`EKREL`](#ekrel) | Works; CPA is rejected natively, and BSF should be used for disorder | Yes |
-| [`FMAG`](#fmag) | Works with a limitation: a zero magnetic moment can cause division by zero during normalization | Yes |
-| [`FSCAT`](#fscat) | Broken: an erroneous spherical-harmonic `+L` index can overflow, and phase is calculated before zero amplitude is handled | No |
-| [`GILBERT`](#gilbert) | Works for suitable magnetic systems; zero or compensated moments can cause division by zero | Yes |
-| [`JALF`](#jalf) | Works with limitations; helper diagnostics contain bugs and small `NL` is risky, which the definition guards against | No |
-| [`JORB`](#jorb) | Works serially; native MPI does not reach final JORB output and does not reduce the accumulators | No |
-| [`JXC`](#jxc) | Works for a simple periodic collinear workflow; the general FREL tensor for symmetry-equivalent neighbors has a native rotation bug | Yes |
-| [`MECHECK`](#mecheck) | Only partially works: `NMEFORM` is always overwritten to 2, another consistency test is disabled at compile time, and the summary loop is faulty | No |
-| [`MEPLOT`](#meplot) | Works except for native curve overwriting in simultaneous photon+electron scans; the definition rejects that combination | No |
-| [`NRAES`](#nraes) | Broken: `IAES` is only partially zeroed and convolution accumulates into uninitialized regions | Yes |
-| [`NUCSSCPL`](#nucsscpl) | Broken: native code deallocates arrays before first allocation, clears matrix elements for each type, and forces the mesh to 1 | No |
-| [`OPTABS`](#optabs) | Works with major caveats: `TEMPEL<=1` leaves `KBT` uninitialized and `NOMEGA<NEB` can overflow allocation; the definition rejects these states | No |
-| [`PHAGEN`](#phagen) | Works as a restricted ASA/VWN converter; NT=1, no disorder, not a general phase-shift solver | No |
-| [`PLOT2DPOT`](#plot2dpot) | Works in ASA for potential; FULLPOT enters an experimental PLY writer and exits before the normal plane-grid output | No |
-| [`PLOT2DPR`](#plot2dpr) | Partially works: in ASA it actually writes potential only; FULLPOT exits in the experimental PLY writer | No |
-| [`PLOT2DRHO`](#plot2drho) | Practically incomplete: ASA cannot plot density; FULLPOT exits in the test PLY writer before the normal plane-grid writer | No |
-| [`PLOTPOT`](#plotpot) | Works for stored ASA and FULLPOT potential data | No |
-| [`PLOTPRS`](#plotprs) | Works with limitations: magnetic spin/orbital curves can collide in the same dataset and panel limits ignore the orbital contribution | No |
-| [`PLOTRHO`](#plotrho) | Broken: `RHORSQ` is allocated only in the potential branch, but the standalone rho writer needs it | No |
-| [`PLOTSFN`](#plotsfn) | Works for a genuine FULLPOT potential containing shape-function data | No |
-| [`POSANI`](#posani) | Works only with a compatible `POSANIPREP`; native data handling assumes `NQ=NT`, and general `NQ!=NT` is broken | Yes |
-| [`POSANIPREP`](#posaniprep) | Works for a simple 3D ASA/FREL `NQ=NT` case; TAUQQ export is broken for general `NQ!=NT` | Yes |
-| [`POSANITAU`](#posanitau) | Works in the audited 3D ASA/FREL workflow; integration bounds need physical validation and the enhancement factor is fixed natively | No |
-| [`PSHIFT`](#pshift) | Works, but resonance splitting is unreliable in some cases | Yes |
-| [`SCF`](#scf) | Works for `BROYDEN2`, `ANDERSON`, and `TCHEBY` within the allowed scope; `PULAY` is invalid and `TCHEBY` is unavailable for FULLPOT | Yes |
-| [`SIGMA`](#sigma) | Works with limitations; the Fermi-sea contribution is not included automatically, and modes use fixed file conventions/ImE | Yes |
-| [`SOCPAR`](#socpar) | Works for the main SOC output; exchange-related output has a wrong unit label and one sign-flip test is unreachable natively | Yes |
-| [`SPLEED`](#spleed) | Works in a conservative fixed-angle workflow; momentum-scan and alternative polarization branches were not audited | Yes |
-| [`STONER`](#stoner) | Works with limitations; uses a hard-coded VWN susceptibility kernel, replaces small DOS values with unit contributions, and has unguarded normalizations | No |
-| [`T1`](#t1) | Broken for numerical use: native `RELT1` treats signed κ as positive counts of mj channels, dropping negative channels and corrupting basis indexing | No |
-| [`TDOBS`](#tdobs) | Declared purpose is not demonstrated: no separate time-dependent observable implementation was found; it behaves as a generic DOS path | No |
-| [`TORQUE`](#torque) | Works, but requires a rotated magnetic potential/geometry; a normal unrotated magnetic potential may stop natively | Yes |
-| [`TUTORIAL`](#tutorial) | Mixed: YLM/JLX/JLX-ASYMPT and DOS-FEG/DOS-SS/DOS-CLU/DOS-BULK/GEN are usable; other branches have specific native bugs/limitations | No |
-| [`VBPES`](#vbpes) | Works with limitations; VBUPS does not automatically select a UV photon energy and the calculation depends on compatible TAU/final-state setup | Yes |
-| [`WFPLOT`](#wfplot) | Works in the ASA/FREL serial workflow; BAND uses only the first energy point and FULLPOT is unsupported | Yes |
-| [`XAS`](#xas) | Works with known caveats; the static branch is usable, but TAU compatibility and the effective scan start must be checked | Yes |
-| [`XES`](#xes) | Not fully verified: RXES enters the shared absorption-rate branch and shares output naming/interpretation with XAS; the emission meaning was not confirmed | Yes |
-| [`XRS`](#xrs) | Broken for reliable numerical results: native `SIG(NEMAX+50,...)` is zeroed only up to `NEMAX` but later summed over the full range | Yes (XRS is at least listed as a supported spectroscopy task; the detailed 9.7 interface is broader) |
+| [`AES`](#aes) | Works only in the limited audited workflow; NQ=1, no f shells, with cache/TAU-capacity risks. The numerical solver was not run during the audit. | Yes. |
+| [`AIPES`](#aipes) | Works in the audited fixed-geometry workflow; it is not numerical integration of ARPES over angles. | Yes. |
+| [`APS`](#aps) | Works with a compatible old-format DOS; positive `GAMMA` broadening follows a problematic native branch. | Yes. |
+| [`ARPES`](#arpes) | The source-defined ARPES workflow is meaningful in the audited range. The current interface uses the correct presence-sensitive `TASK.CRYS_VECS`; advanced numerical branches are not certified. | Yes. |
+| [`BAND`](#band) | Works in the audited workflow; an eigen-solver failure can continue natively as far as `LOG(0)`. This is not `BSF` or `EKREL`. | Yes. |
+| [`BONDING`](#bonding) | Broken: normal `TAU_DRIVE` prepares `KTAUIJ=0`, while `CLUBONDING` reads scratch units requiring `KTAUIJ>=2`. | No. |
+| [`BSDOSIJ`](#bsdosij) | Broken: native `J_ITJT` is written with energy indices into pair dimensions and later read in a different order. | No. |
+| [`BSF`](#bsf) | Schema only, not a task. Works; the E-k default `EMAX=-1 Ry` is a suspicious convenience default and need not mean EF. | Yes. |
+| [`BSFEK`](#bsfek) | Works like `BSF`; the alias only preselects the expected E-k mode through `ENERGY.NE`. | Yes, as `BSF`; the name `BSFEK` is an ASE2SPRKKR alias. |
+| [`BSFKK`](#bsfkk) | Works like `BSF`; the alias only preselects the expected single-energy k-k mode. | Yes, as `BSF`; the name `BSFKK` is an ASE2SPRKKR alias. |
+| [`CHI`](#chi) | Works in the audited static workflow; native `NCHIITER` is forcibly reset to 1 before the loop, so the iterative magnetization part does not actually run. | Yes. |
+| [`CHILANDAU`](#chilandau) | Works serially with limitations; MPI and `RDTAUFIL` reuse are broken, and native finish logic prints partial sums. | No. |
+| [`CHIXAS`](#chixas) | Works only with physically consistent external `NEF/CHISPN/CHIVV`; no universally safe defaults exist. | No. |
+| [`CLPES`](#clpes) | Works in the audited serial fixed-geometry workflow; CPA and some polarization modes stop natively, and with `NE=1` the core-state index must be valid. | No. |
+| [`CLXPS`](#clxps) | Works in the audited ASA/FREL workflow; advanced angular geometries and numerical output were not independently certified. | Yes. |
+| [`COMPTON`](#compton) | Works with limitations; `EMD2D` double-scales nonzero `PNMAX`, and shifted even grids lose their endpoints. | Yes. |
+| [`DMI`](#dmi) | Works with significant caveats: the individual DMI components are not equivalent in the native source (especially Dz), and frame/multiplicity/radius must be checked. | No as a separate task in the available manual; JXC is documented. |
+| [`DOS`](#dos) | Works. | Yes. |
+| [`EKREL`](#ekrel) | Works; CPA is rejected natively, and BSF should be used for disorder. | Yes. |
+| [`FMAG`](#fmag) | Works with a limitation: a zero magnetic moment can lead to division by zero during normalization. | Yes. |
+| [`FSCAT`](#fscat) | Broken: an erroneous spherical-harmonic `+L` index can overflow, and phase is calculated before zero amplitude is handled. | No. |
+| [`GILBERT`](#gilbert) | Works for suitable magnetic systems; zero or compensated moments can cause division by zero. | Yes. |
+| [`JALF`](#jalf) | Works with limitations; helper diagnostics contain bugs and small `NL` is risky, which the definition guards against. | No. |
+| [`JORB`](#jorb) | Works serially; native MPI does not reach the final JORB output and does not reduce the accumulators. | No. |
+| [`JXC`](#jxc) | Works for a simple periodic collinear workflow; the general FREL tensor for symmetry-equivalent neighbors has a native rotation bug, and the cluster SP-SREL scratch flow is unreliable. | Yes. |
+| [`MECHECK`](#mecheck) | Only partially works: `NMEFORM` is always overwritten to 2 natively, another consistency test is disabled at compile time, and the summary loop is faulty. | No. |
+| [`MEPLOT`](#meplot) | Works except for native curve overwriting in simultaneous photon+electron scans; the definition rejects that combination. The meaning of `SEFIN` still requires physical verification. | No. |
+| [`NRAES`](#nraes) | Broken: `IAES` is only partially zeroed and convolution accumulates into uninitialized regions. | Yes. |
+| [`NUCSSCPL`](#nucsscpl) | Broken: native code deallocates arrays before first allocation, clears matrix elements for each type, and forces the mesh to 1. | No. |
+| [`OPTABS`](#optabs) | Works with major caveats: `TEMPEL<=1` leaves `KBT` uninitialized and `NOMEGA<NEB` can overflow the allocation; the definition rejects these states. | No. |
+| [`PHAGEN`](#phagen) | Works as a restricted ASA/VWN converter; NT=1, no disorder, and it is not a general phase-shift solver. | No. |
+| [`PLOT2DPOT`](#plot2dpot) | Works in ASA for potential; the FULLPOT branch enters an experimental PLY writer and exits before the normal plane-grid output. | No. |
+| [`PLOT2DPR`](#plot2dpr) | Partially works: in ASA it actually writes only the potential; the FULLPOT branch exits in the experimental PLY writer. | No. |
+| [`PLOT2DRHO`](#plot2drho) | Practically incomplete: ASA cannot plot density; FULLPOT exits in the test PLY writer before the normal plane-grid writer. | No. |
+| [`PLOTPOT`](#plotpot) | Works for stored ASA and FULLPOT potential data. | No. |
+| [`PLOTPRS`](#plotprs) | Works with limitations: magnetic spin/orbital curves can collide in the same dataset, and panel limits ignore the orbital contribution. | No. |
+| [`PLOTRHO`](#plotrho) | Broken: `RHORSQ` is allocated only in the potential branch, but the standalone rho writer needs it. | No. |
+| [`PLOTSFN`](#plotsfn) | Works for a genuine FULLPOT potential containing shape-function data. | No. |
+| [`POSANI`](#posani) | Works only with a compatible `POSANIPREP`; the native data path assumes `NQ=NT`, and general `NQ!=NT` is broken. | Yes. |
+| [`POSANIPREP`](#posaniprep) | Works for a simple 3D ASA/FREL `NQ=NT` case; TAUQQ export is broken for general `NQ!=NT`. The positron-band-bottom energy must be chosen by the user. | Yes. |
+| [`POSANITAU`](#posanitau) | Works in the audited 3D ASA/FREL workflow; integration-energy bounds need physical validation and the enhancement factor is fixed natively. | No. |
+| [`PSHIFT`](#pshift) | Works, but resonance splitting is unreliable in some cases. | Yes. |
+| [`SCF`](#scf) | Works for `BROYDEN2`, `ANDERSON`, and `TCHEBY` within the allowed scope; `PULAY` is not a valid choice and `TCHEBY` is unavailable for FULLPOT. | Yes. |
+| [`SIGMA`](#sigma) | Works with limitations; the Fermi-sea contribution is not included automatically, and the modes use fixed file conventions/ImE. | Yes. |
+| [`SOCPAR`](#socpar) | Works for the main SOC output; exchange-related output has a wrong unit label and one sign-flip test is unreachable in the native code. | Yes. |
+| [`SPLEED`](#spleed) | Works in a conservative fixed-angle workflow; momentum-scan and alternative-polarization branches were not audited. | Yes. |
+| [`STONER`](#stoner) | Works with limitations; it uses a hard-coded VWN susceptibility kernel, natively replaces small DOS values with unit contributions, and some zero normalizations are unguarded. | No. |
+| [`T1`](#t1) | Broken for numerical use: native `RELT1` treats signed κ values as positive counts of mj channels, so negative channels disappear and basis indexing is wrong. | No. |
+| [`TDOBS`](#tdobs) | The declared purpose is not demonstrated: no separate time-dependent-observable implementation was found; as a generic DOS path it can run serially. | No. |
+| [`TORQUE`](#torque) | Works, but requires a rotated magnetic potential/geometry; a normal unrotated magnetic potential may stop natively, and mixed occupancy uses the first type. | Yes. |
+| [`TUTORIAL`](#tutorial) | Mixed: YLM/JLX/JLX-ASYMPT and DOS-FEG/DOS-SS/DOS-CLU/DOS-BULK/GEN are usable; CHR-POT, POT-DECOMP/POT-XC, RWF-L/RWF-E, and CORE-ALL have specific native bugs/limitations. | No. |
+| [`VBPES`](#vbpes) | Works with limitations; VBUPS does not automatically select a UV photon energy natively, and the calculation depends on a compatible TAU/final-state setup. | Yes. |
+| [`WFPLOT`](#wfplot) | Works in the ASA/FREL serial workflow; BAND uses only the first energy point and FULLPOT is unsupported. | Yes. |
+| [`XAS`](#xas) | Works with known caveats; the static branch is usable, but TAU compatibility and the effective start of the energy scan must be checked. Native MPI exits before XRAYSPEC. | Yes. |
+| [`XES`](#xes) | Not fully verified: RXES ends in the shared absorption-rate branch and output naming/interpretation is shared with XAS; the physical emission meaning was not confirmed. | Yes. |
+| [`XRS`](#xrs) | Broken for reliable numerical results: native `SIG(NEMAX+50,...)` is zeroed only up to `NEMAX`, but is later summed over the full range. | Yes (XRS is at least listed as a supported spectroscopy task; the detailed 9.7 interface is broader). |
 
 ## Tasks
 
