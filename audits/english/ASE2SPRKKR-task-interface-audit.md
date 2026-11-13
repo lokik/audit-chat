@@ -1,13 +1,13 @@
 # ASE2SPRKKR — Task Interface, Parameter and Documentation Audit
 
 **Updated:** 13 November 2026  
-**Reference functional audit:** [Consolidated SPR-KKR 9.7 / ASE2SPRKKR audit](../SPRKKR-ASE2SPRKKR-common-audit.md) (9 November 2026), and linked individual audits.  
+**Reference functional audit:** [Consolidated SPR-KKR 9.7 / ASE2SPRKKR audit](SPRKKR-ASE2SPRKKR-common-audit.md) (9 November 2026), and linked individual audits.  
 **Implementation baseline:** SPR-KKR public 9.7 archive `PUB9.7_260420_18h13`; the reference functional audit checked ASE2SPRKKR `develop` at `49d7d0f1254dbc98cd7ae9a483b28747ddbe9bf6`. Current schema/registry and file naming were additionally spot-checked at `develop` `8aa03363433b45b98e2594bfaecc7578a46be94c` (12 November 2026). **The full suite was not rerun at this newer revision.**  
 **Manual comparison:** public SPR-KKR User's Guide (8.6-era reference used in the earlier task audit); classification of parameter names is carried over and should be considered **provisional** unless a per-task audit cites the relevant manual section.
 
 ## Purpose and interpretation
 
-This document is an **ASE2SPRKKR interface audit**, complementing rather than duplicating the existing [source-code/functionality audit](../SPRKKR-ASE2SPRKKR-common-audit.md). It records each task's purpose, concise operational limitations, file contract, task-specific parameters and which of them are documented in the available manual. Technical fault analysis is linked, not copied.
+This document is an **ASE2SPRKKR interface audit**, complementing rather than duplicating the existing [source-code/functionality audit](SPRKKR-ASE2SPRKKR-common-audit.md). It records each task's purpose, concise operational limitations, file contract, task-specific parameters and which of them are documented in the available manual. Technical fault analysis is linked, not copied.
 
 - **Task list:** 56 entries including the `BSF` **schema-only** heading; the reference audit reports **55 registered task identities**. `BSFEK`/`BSFKK` share the BSF schema, while `DMI` has its own identity with JXC's schema. Unregistered native-only names (e.g. BIS, SIGMA-XAS) remain documented in the functional audit rather than masquerading as runnable ASE2SPRKKR tasks.
 - **Input files:** generated SPR-KKR input is normally delivered via standard input and refers to `CONTROL.POTFIL`. Required external files, optional reusable cache files, and input-mode auxiliary files are distinguished. `TAUDIR` / `TAUPATH` may affect cache location.
@@ -93,7 +93,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_aes.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [AES](AES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [AES](tasks/AES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### AIPES
 
@@ -109,7 +109,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_aipes.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `SPEC` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [AIPES](AIPES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [AIPES](tasks/AIPES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### APS
 
@@ -125,7 +125,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_aps.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [APS](APS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [APS](tasks/APS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### ARPES
 
@@ -141,7 +141,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_arpes_audit.py`, `src/ase2sprkkr/input_parameters/test/test_arpes_energy.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `ARPES` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [ARPES](ARPES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [ARPES](tasks/ARPES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BAND
 
@@ -157,7 +157,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_band.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `SPEC` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [BAND](BAND-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [BAND](tasks/BAND-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BONDING
 
@@ -173,7 +173,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_bonding.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [BONDING](BONDING-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [BONDING](tasks/BONDING-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSDOSIJ
 
@@ -189,7 +189,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_bsdosij.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [BSDOSIJ](BSDOSIJ-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [BSDOSIJ](tasks/BSDOSIJ-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSF
 
@@ -206,7 +206,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `BSF` selected by the task definition (file parsing does not guarantee physical validation).
 - **Interface detail:** `BSF` is a schema, not an independent registered task. Use `InputParameters.for_task('BSFEK')` or `for_task('BSFKK')` (or `for_definition('BSF')` for the schema).
-- **Detailed source/functionality audit:** [BSF](BSF-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [BSF](tasks/BSF-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSFEK
 
@@ -223,7 +223,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `BSF` selected by the task definition (file parsing does not guarantee physical validation).
 - **Interface detail:** Separate registered task identity; shares the BSF schema and selects E–k via `ENERGY.NE`.
-- **Detailed source/functionality audit:** [BSF](BSF-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [BSF](tasks/BSF-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSFKK
 
@@ -240,7 +240,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `BSF` selected by the task definition (file parsing does not guarantee physical validation).
 - **Interface detail:** Separate registered task identity; shares the BSF schema and selects k–k via `ENERGY.NE`.
-- **Detailed source/functionality audit:** [BSF](BSF-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [BSF](tasks/BSF-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CHI
 
@@ -256,7 +256,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_chi.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [CHI](CHI-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [CHI](tasks/CHI-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CHILANDAU
 
@@ -272,7 +272,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_chilandau.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [CHILANDAU](CHILANDAU-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [CHILANDAU](tasks/CHILANDAU-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CHIXAS
 
@@ -288,7 +288,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_chixas.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [CHIXAS](CHIXAS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [CHIXAS](tasks/CHIXAS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CLPES
 
@@ -304,7 +304,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_clpes.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `ARPES` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [CLPES](CLPES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [CLPES](tasks/CLPES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CLXPS
 
@@ -320,7 +320,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_clxps.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [CLXPS](CLXPS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [CLXPS](tasks/CLXPS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### COMPTON
 
@@ -336,7 +336,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_compton.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [COMPTON](COMPTON-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [COMPTON](tasks/COMPTON-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### DMI
 
@@ -353,7 +353,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `JXC` selected by the task definition (file parsing does not guarantee physical validation).
 - **Interface detail:** Shares the JXC schema but has its own registered task identity; native DMI-only and JXC+DMI requests are different.
-- **Detailed source/functionality audit:** [DMI](DMI-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [DMI](tasks/DMI-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### DOS
 
@@ -369,7 +369,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_dos.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `DOS` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [DOS](DOS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [DOS](tasks/DOS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### EKREL
 
@@ -385,7 +385,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_ekrel.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [EKREL](EKREL-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [EKREL](tasks/EKREL-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### FMAG
 
@@ -401,7 +401,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_fmag.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [FMAG](FMAG-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [FMAG](tasks/FMAG-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### FSCAT
 
@@ -417,7 +417,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_fscat.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [FSCAT](FSCAT-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [FSCAT](tasks/FSCAT-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### GILBERT
 
@@ -434,7 +434,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
 - **Interface detail:** The current task definition enables MPI; this is *not* evidence of verified serial/MPI numerical agreement.
-- **Detailed source/functionality audit:** [GILBERT](GILBERT-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [GILBERT](tasks/GILBERT-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### JALF
 
@@ -450,7 +450,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_jalf.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [JALF](JALF-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [JALF](tasks/JALF-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### JORB
 
@@ -466,7 +466,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_jorb.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [JORB](JORB-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [JORB](tasks/JORB-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### JXC
 
@@ -482,7 +482,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_jxc.py`, `src/ase2sprkkr/input_parameters/test/test_jxc_definition.py`, `src/ase2sprkkr/input_parameters/test/test_exchange_file_manifests.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `JXC` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [JXC](JXC-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [JXC](tasks/JXC-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### MECHECK
 
@@ -498,7 +498,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_mecheck.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [MECHECK](MECHECK-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [MECHECK](tasks/MECHECK-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### MEPLOT
 
@@ -514,7 +514,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_meplot.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [MEPLOT](MEPLOT-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [MEPLOT](tasks/MEPLOT-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### NRAES
 
@@ -530,7 +530,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_nraes.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [NRAES](NRAES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [NRAES](tasks/NRAES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### NUCSSCPL
 
@@ -546,7 +546,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_scattering_file_manifests.py`, `src/ase2sprkkr/input_parameters/test/test_dataset_filenames.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [NUCSSCPL](NUCSSCPL-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [NUCSSCPL](tasks/NUCSSCPL-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### OPTABS
 
@@ -562,7 +562,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_optabs.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [OPTABS](OPTABS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [OPTABS](tasks/OPTABS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PHAGEN
 
@@ -578,7 +578,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_phagen.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** Native PHAGEN export integration test passed for converged Au, verifying both output files; no comparison with MsSpec or independent physical benchmark.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [PHAGEN](PHAGEN-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PHAGEN](tasks/PHAGEN-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOT2DPOT
 
@@ -595,7 +595,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
 - **Interface detail:** `TASK.AVEC/BVEC/DVEC` use Cartesian **ALAT units**.
-- **Detailed source/functionality audit:** [PLOT2D-selectors](PLOT2D-selectors-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOT2D-selectors](tasks/PLOT2D-selectors-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOT2DPR
 
@@ -612,7 +612,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
 - **Interface detail:** `TASK.AVEC/BVEC/DVEC` are Cartesian vectors in **ALAT units** (not direct Bohr or fractional cell coordinates).
-- **Detailed source/functionality audit:** [PLOT2DPR](PLOT2DPR-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOT2DPR](tasks/PLOT2DPR-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOT2DRHO
 
@@ -629,7 +629,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
 - **Interface detail:** `TASK.AVEC/BVEC/DVEC` use Cartesian **ALAT units**.
-- **Detailed source/functionality audit:** [PLOT2D-selectors](PLOT2D-selectors-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOT2D-selectors](tasks/PLOT2D-selectors-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTPOT
 
@@ -645,7 +645,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`, `src/ase2sprkkr/input_parameters/test/test_plot_selector_file_manifests.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [PLOT-selectors](PLOT-selectors-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOT-selectors](tasks/PLOT-selectors-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTPRS
 
@@ -661,7 +661,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [PLOTPRS](PLOTPRS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOTPRS](tasks/PLOTPRS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTRHO
 
@@ -677,7 +677,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`, `src/ase2sprkkr/input_parameters/test/test_plot_selector_file_manifests.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [PLOT-selectors](PLOT-selectors-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOT-selectors](tasks/PLOT-selectors-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTSFN
 
@@ -693,7 +693,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`, `src/ase2sprkkr/input_parameters/test/test_plot_selector_file_manifests.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [PLOT-selectors](PLOT-selectors-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PLOT-selectors](tasks/PLOT-selectors-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### POSANI
 
@@ -709,7 +709,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_posani.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [POSANI](POSANI-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [POSANI](tasks/POSANI-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### POSANIPREP
 
@@ -725,7 +725,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_posaniprep.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [POSANIPREP](POSANIPREP-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [POSANIPREP](tasks/POSANIPREP-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### POSANITAU
 
@@ -741,7 +741,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_posanitau.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [POSANITAU](POSANITAU-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [POSANITAU](tasks/POSANITAU-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PSHIFT
 
@@ -757,7 +757,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_pshift.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [PSHIFT](PSHIFT-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [PSHIFT](tasks/PSHIFT-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SCF
 
@@ -773,7 +773,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_scf_audit.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `SCF` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [SCF](SCF-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [SCF](tasks/SCF-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SIGMA
 
@@ -789,7 +789,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_sigma.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [SIGMA](SIGMA-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [SIGMA](tasks/SIGMA-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SOCPAR
 
@@ -805,7 +805,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_socpar.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [SOCPAR](SOCPAR-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [SOCPAR](tasks/SOCPAR-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SPLEED
 
@@ -821,7 +821,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_spleed.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** `SPEC` selected by the task definition (file parsing does not guarantee physical validation).
-- **Detailed source/functionality audit:** [SPLEED](SPLEED-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [SPLEED](tasks/SPLEED-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### STONER
 
@@ -837,7 +837,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_stoner.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [STONER](STONER-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [STONER](tasks/STONER-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### T1
 
@@ -853,7 +853,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_t1.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [T1](T1-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [T1](tasks/T1-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### TDOBS
 
@@ -869,7 +869,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_tdobs.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [TDOBS](TDOBS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [TDOBS](tasks/TDOBS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### TORQUE
 
@@ -885,7 +885,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_torque.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [TORQUE](TORQUE-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [TORQUE](tasks/TORQUE-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### TUTORIAL
 
@@ -901,7 +901,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_tutorial.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [TUTORIAL](TUTORIAL-complete-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [TUTORIAL](tasks/TUTORIAL-complete-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### VBPES
 
@@ -917,7 +917,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_vbpes.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [VBPES](VBPES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [VBPES](tasks/VBPES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### WFPLOT
 
@@ -933,7 +933,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_wfplot.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [WFPLOT](WFPLOT-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [WFPLOT](tasks/WFPLOT-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### XAS
 
@@ -949,7 +949,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_xas.py`, `src/ase2sprkkr/input_parameters/test/test_xas_definition.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [XAS](XAS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [XAS](tasks/XAS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### XES
 
@@ -965,7 +965,7 @@ This document is an **ASE2SPRKKR interface audit**, complementing rather than du
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_xes.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [XES](XES-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [XES](tasks/XES-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### XRS
 
@@ -1003,5 +1003,5 @@ These are not counted among the 56 user-facing names above, but they are relevan
 - **ASE2SPRKKR tests:** `src/ase2sprkkr/input_parameters/test/test_xrs.py`. These are tests **reported in the 9 Nov 2026 reference audit**, not a new execution at the latest HEAD.
 - **Native / numerical verification:** No independent task-specific native numerical benchmark established by the reference audit. Passing Python tests and declared output readers do not certify physics.
 - **Structured result reader:** No dedicated reader established here; native logs or specialized output files must not be mistaken for validated structured results.
-- **Detailed source/functionality audit:** [XRS](XRS-audit.md); [consolidated source assessment](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Detailed source/functionality audit:** [XRS](tasks/XRS-audit.md); [consolidated source assessment](SPRKKR-ASE2SPRKKR-common-audit.md).
 

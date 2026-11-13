@@ -11,9 +11,10 @@ These two complementary task-by-task inventories cover **56 headings** (55 regis
 
 ## Native functionality, limitations and bug evidence
 
-- [Consolidated SPR-KKR 9.7 / ASE2SPRKKR source audit](audits/SPRKKR-ASE2SPRKKR-common-audit.md) — status categories, working and broken branches, defaults, implementation restrictions and verification scope.
-- [English individual task audits](audits/english/) — native routines, line-level findings and limitations.
-- [České audity jednotlivých tasků](audits/czech/) — české podrobné zprávy.
+- [English — Consolidated SPR-KKR 9.7 / ASE2SPRKKR source audit](audits/english/SPRKKR-ASE2SPRKKR-common-audit.md) — status categories, working and broken branches, defaults, implementation restrictions and verification scope.
+- [Česky — společný audit SPR-KKR 9.7 a ASE2SPRKKR](audits/czech/SPRKKR-ASE2SPRKKR-common-audit.md) — český překlad funkčního auditu.
+- [English individual task audits](audits/english/tasks/) — native routines, line-level findings and limitations.
+- [České audity jednotlivých tasků](audits/czech/tasks/) — české podrobné zprávy.
 
 ## Verification and baseline
 
