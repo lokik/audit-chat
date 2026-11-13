@@ -18,64 +18,64 @@ Jde o **audit rozhraní ASE2SPRKKR**, který doplňuje existující [audit zdroj
 
 ## Index
 
-| Task | Status (short) | In manual |
+| Task | Stručný stav | Pokrytí manuálem |
 |---|---|---|
-| [`AES`](#aes) | Funguje jen v omezeném auditovaném workflow; NQ=1, bez f-shellů a s riziky v cache/TAU kapacitě | Ano |
-| [`AIPES`](#aipes) | Funguje v auditovaném fixed-geometry workflow; není to numerická integrace ARPES přes úhly | Ano |
-| [`APS`](#aps) | Funguje s kompatibilním starým DOS; pozitivní `GAMMA` broadening má nativní problematickou větev | Ano |
-| [`ARPES`](#arpes) | Funguje, ale současná definice má správnou podporu nativního, presence-sensitive `CRYS_VECS`; nízkoúrovňové/expert větve … | Ano |
-| [`BAND`](#band) | Funguje v auditovaném workflow; selhání eigen-solveru může nativně pokračovat až k `LOG(0)` | Ano |
-| [`BONDING`](#bonding) | Rozbité: běžný `TAU_DRIVE` připraví `KTAUIJ=0`, ale `CLUBONDING` čte scratch jednotky vyžadující `KTAUIJ>=2` | Ne |
-| [`BSDOSIJ`](#bsdosij) | Rozbité: nativní `J_ITJT` je zapisováno energetickými indexy do pair dimenzí a později čteno v jiném pořadí | Ne |
-| [`BSF`](#bsf) | Pouze schéma; nativní BSF funguje; E-k default `EMAX=-1 Ry` je podezřelý convenience default a nemusí znamenat EF | Ano |
-| [`BSFEK`](#bsfek) | Funguje stejně jako `BSF`; alias pouze předvolí očekávaný E-k režim přes `ENERGY.NE` | Ano, jako `BSF`; jméno `BSFEK` je ASE2SPRKKR alias |
-| [`BSFKK`](#bsfkk) | Funguje stejně jako `BSF`; alias pouze předvolí očekávaný single-energy k-k režim | Ano, jako `BSF`; jméno `BSFKK` je ASE2SPRKKR alias |
-| [`CHI`](#chi) | Funguje v auditovaném statickém workflow; nativní `NCHIITER` je před smyčkou natvrdo resetováno na 1, takže iterativn… | Ano |
-| [`CHILANDAU`](#chilandau) | Funguje sériově s omezeními; MPI a reuse `RDTAUFIL` jsou rozbité a nativní finish logic vypisuje mezisoučty | Ne |
-| [`CHIXAS`](#chixas) | Funguje jen při fyzikálně konzistentních externích `NEF/CHISPN/CHIVV`; univerzální bezpečné defaulty neexistují | Ne |
-| [`CLPES`](#clpes) | Funguje v auditovaném sériovém fixed-geometry workflow; CPA a některé polarizační režimy nativně stopnou, při `NE=1` … | Ne |
-| [`CLXPS`](#clxps) | Funguje v auditovaném ASA/FREL workflow; advanced angular geometries a numerický output nebyly samostatně certifikovány | Ano |
-| [`COMPTON`](#compton) | Funguje s omezeními; `EMD2D` má při nenulovém `PNMAX` dvojí škálování a posunuté sudé mřížky ztrácejí krajní body | Ano |
-| [`DMI`](#dmi) | Funguje s významnými ALE: jednotlivé DMI komponenty nejsou v nativním zdroji ekvivalentní (zejména Dz) a je nutné ově… | Ne jako samostatný task v dostupném manuálu; JXC je popsán |
-| [`DOS`](#dos) | Funguje | Ano |
-| [`EKREL`](#ekrel) | Funguje; CPA je nativně odmítnuto, pro disorder se má použít BSF | Ano |
-| [`FMAG`](#fmag) | Funguje s omezením: nulový magnetický moment může při normalizaci vést k dělení nulou | Ano |
-| [`FSCAT`](#fscat) | Rozbité: chybný spherical-harmonic index `+L` může přetéct a fáze se počítá před ošetřením nulové amplitudy | Ne |
-| [`GILBERT`](#gilbert) | Funguje pro vhodné magnetické systémy; nulové nebo kompenzované momenty mohou způsobit dělení nulou | Ano |
-| [`JALF`](#jalf) | Funguje s omezeními; helper diagnostiky mají chyby a malý `NL` je rizikový, což definice hlídá | Ne |
-| [`JORB`](#jorb) | Funguje sériově; nativní MPI workflow nedojde k finálnímu JORB výstupu a neredukuje akumulátory | Ne |
-| [`JXC`](#jxc) | Funguje pro jednoduchý periodický kolineární workflow; obecný FREL tensor se symetricky ekvivalentními sousedy má nat… | Ano |
-| [`MECHECK`](#mecheck) | Funguje jen částečně: `NMEFORM` je nativně vždy přepsáno na 2, další consistency test je compile-time vypnutý a summa… | Ne |
-| [`MEPLOT`](#meplot) | Funguje, až na nativní přepisování křivek při současném photon+electron scanu; definice tuto kombinaci odmítá | Ne |
-| [`NRAES`](#nraes) | Rozbité: `IAES` je jen částečně nulováno a convolution akumuluje do neinicializovaných oblastí | Ano |
-| [`NUCSSCPL`](#nucsscpl) | Rozbité: nativní kód deallocuje pole před první alokací, vynuluje matrix elements pro každý type a nutí mesh na 1 | Ne |
-| [`OPTABS`](#optabs) | Funguje s velkými ALE: `TEMPEL<=1` nechává `KBT` neinicializované a `NOMEGA<NEB` může přepsat alokaci; definice tyto … | Ne |
-| [`PHAGEN`](#phagen) | Funguje jako omezený ASA/VWN converter; NT=1, bez disorder, ne jako obecný phase-shift solver | Ne |
-| [`PLOT2DPOT`](#plot2dpot) | Funguje v ASA pro potential; FULLPOT větev jde do experimentálního PLY writeru a skončí před běžným plane-grid outputem | Ne |
-| [`PLOT2DPR`](#plot2dpr) | Částečně funguje: v ASA ve skutečnosti zapisuje jen potential; FULLPOT větev skončí v experimentálním PLY writeru | Ne |
-| [`PLOT2DRHO`](#plot2drho) | Prakticky neúplné: ASA density neumí; FULLPOT skončí v testovacím PLY writeru před běžným plane-grid writerem | Ne |
-| [`PLOTPOT`](#plotpot) | Funguje pro ASA i FULLPOT stored potential data | Ne |
-| [`PLOTPRS`](#plotprs) | Funguje s omezeními: magnetic spin/orb curves mohou kolidovat ve stejném datasetu a panel limits ignorují orbital con… | Ne |
-| [`PLOTRHO`](#plotrho) | Rozbité: `RHORSQ` se alokuje jen v potential branch, ale standalone rho writer ho potřebuje | Ne |
-| [`PLOTSFN`](#plotsfn) | Funguje pro skutečný FULLPOT potential se shape-function daty | Ne |
-| [`POSANI`](#posani) | Funguje jen s kompatibilním `POSANIPREP`; nativní data path předpokládá `NQ=NT` a obecný `NQ!=NT` workflow je rozbitý | Ano |
-| [`POSANIPREP`](#posaniprep) | Funguje pro jednoduchý 3D ASA/FREL `NQ=NT`; export TAUQQ je pro obecné `NQ!=NT` rozbitý | Ano |
-| [`POSANITAU`](#posanitau) | Funguje v auditovaném 3D ASA/FREL workflow; integrační energy bounds je třeba fyzikálně ověřit a enhancement factor j… | Ne |
-| [`PSHIFT`](#pshift) | Funguje, ale resonance splitting je v některých případech nespolehlivý | Ano |
-| [`SCF`](#scf) | Funguje pro `BROYDEN2`, `ANDERSON` a `TCHEBY` v povoleném scope; `PULAY` není validní a `TCHEBY` není pro FULLPOT | Ano |
-| [`SIGMA`](#sigma) | Funguje s omezeními; Fermi-sea není zahrnuta automaticky a režimy používají fixní file conventions/ImE | Ano |
-| [`SOCPAR`](#socpar) | Funguje pro hlavní SOC výstup; exchange-related output má chybný label jednotek a jeden sign-flip test je nativně ned… | Ano |
-| [`SPLEED`](#spleed) | Funguje v konzervativním fixed-angle workflow; momentum-scan a alternativní polarizační větve nejsou auditovány | Ano |
-| [`STONER`](#stoner) | Funguje s omezeními; používá natvrdo VWN susceptibility kernel, malé DOS hodnoty nativně nahrazuje jednotkovým příspě… | Ne |
-| [`T1`](#t1) | Rozbité pro numerický účel: nativní `RELT1` používá signed κ jako kladné počty mj kanálů, takže záporné kanály mizí a… | Ne |
-| [`TDOBS`](#tdobs) | Deklarovaný účel není prokázaný: nenašel se samostatný time-dependent observable implementation; jako generic DOS pat… | Ne |
-| [`TORQUE`](#torque) | Funguje, ale vyžaduje rotated magnetic potential/geometry; běžný nerotovaný magnetic potential může nativně STOPnout … | Ano |
-| [`TUTORIAL`](#tutorial) | Smíšený stav: YLM/JLX/JLX-ASYMPT a DOS-FEG/DOS-SS/DOS-CLU/DOS-BULK/GEN jsou použitelné; CHR-POT, POT-DECOMP/POT-XC, R… | Ne |
-| [`VBPES`](#vbpes) | Funguje s omezeními; VBUPS si nativně automaticky nevolí UV photon energy a výpočet závisí na kompatibilním TAU/final… | Ano |
-| [`WFPLOT`](#wfplot) | Funguje v ASA/FREL serial workflow; BAND používá jen první energy point, FULLPOT není podporován | Ano |
-| [`XAS`](#xas) | Funguje se známými ALE; static branch je použitelný, ale TAU compatibility a efektivní začátek energy scanu je nutné … | Ano |
-| [`XES`](#xes) | Ne zcela ověřené: RXES skončí ve sdílené absorption-rate větvi a output naming/interpretace je sdílená s XAS; fyzikál… | Ano |
-| [`XRS`](#xrs) | Rozbité pro spolehlivý numerický výsledek: nativní `SIG(NEMAX+50, | Ano (v manuálu je XRS alespoň jako podporovaný spectroscopy task; detailní 9.7 interface je širší) |
+| [`AES`](#aes) | Funguje jen v omezeném auditovaném workflow; NQ=1, bez f-shellů a s riziky v cache/TAU kapacitě. Numerický solver nebyl v auditu spuštěn. | Ano. |
+| [`AIPES`](#aipes) | Funguje v auditovaném fixed-geometry workflow; není to numerická integrace ARPES přes úhly. | Ano. |
+| [`APS`](#aps) | Funguje s kompatibilním starým DOS; pozitivní `GAMMA` broadening má nativní problematickou větev. | Ano. |
+| [`ARPES`](#arpes) | Nativní ARPES workflow je v auditovaném rozsahu smysluplné. Současné rozhraní používá správné presence-sensitive `TASK.CRYS_VECS`; pokročilé numerické větve nejsou ověřené. | Ano. |
+| [`BAND`](#band) | Funguje v auditovaném workflow; selhání eigen-solveru může nativně pokračovat až k `LOG(0)`. Není to `BSF` ani `EKREL`. | Ano. |
+| [`BONDING`](#bonding) | Rozbité: běžný `TAU_DRIVE` připraví `KTAUIJ=0`, ale `CLUBONDING` čte scratch jednotky vyžadující `KTAUIJ>=2`. | Ne. |
+| [`BSDOSIJ`](#bsdosij) | Rozbité: nativní `J_ITJT` je zapisováno energetickými indexy do pair dimenzí a později čteno v jiném pořadí. | Ne. |
+| [`BSF`](#bsf) | Pouze schéma, ne task. Funguje; E-k default `EMAX=-1 Ry` je podezřelý convenience default a nemusí znamenat EF. | Ano. |
+| [`BSFEK`](#bsfek) | Funguje stejně jako `BSF`; alias pouze předvolí očekávaný E-k režim přes `ENERGY.NE`. | Ano, jako `BSF`; jméno `BSFEK` je ASE2SPRKKR alias. |
+| [`BSFKK`](#bsfkk) | Funguje stejně jako `BSF`; alias pouze předvolí očekávaný single-energy k-k režim. | Ano, jako `BSF`; jméno `BSFKK` je ASE2SPRKKR alias. |
+| [`CHI`](#chi) | Funguje v auditovaném statickém workflow; nativní `NCHIITER` je před smyčkou natvrdo resetováno na 1, takže iterativní magnetizační část ve skutečnosti neběží. | Ano. |
+| [`CHILANDAU`](#chilandau) | Funguje sériově s omezeními; MPI a reuse `RDTAUFIL` jsou rozbité a nativní finish logic vypisuje mezisoučty. | Ne. |
+| [`CHIXAS`](#chixas) | Funguje jen při fyzikálně konzistentních externích `NEF/CHISPN/CHIVV`; univerzální bezpečné defaulty neexistují. | Ne. |
+| [`CLPES`](#clpes) | Funguje v auditovaném sériovém fixed-geometry workflow; CPA a některé polarizační režimy nativně stopnou, při `NE=1` je nutné hlídat core-state index. | Ne. |
+| [`CLXPS`](#clxps) | Funguje v auditovaném ASA/FREL workflow; advanced angular geometries a numerický output nebyly samostatně certifikovány. | Ano. |
+| [`COMPTON`](#compton) | Funguje s omezeními; `EMD2D` má při nenulovém `PNMAX` dvojí škálování a posunuté sudé mřížky ztrácejí krajní body. | Ano. |
+| [`DMI`](#dmi) | Funguje s významnými ALE: jednotlivé DMI komponenty nejsou v nativním zdroji ekvivalentní (zejména Dz) a je nutné ověřovat frame/multiplicity/radius. | Ne jako samostatný task v dostupném manuálu; JXC je popsán. |
+| [`DOS`](#dos) | Funguje. | Ano. |
+| [`EKREL`](#ekrel) | Funguje; CPA je nativně odmítnuto, pro disorder se má použít BSF. | Ano. |
+| [`FMAG`](#fmag) | Funguje s omezením: nulový magnetický moment může při normalizaci vést k dělení nulou. | Ano. |
+| [`FSCAT`](#fscat) | Rozbité: chybný spherical-harmonic index `+L` může přetéct a fáze se počítá před ošetřením nulové amplitudy. | Ne. |
+| [`GILBERT`](#gilbert) | Funguje pro vhodné magnetické systémy; nulové nebo kompenzované momenty mohou způsobit dělení nulou. | Ano. |
+| [`JALF`](#jalf) | Funguje s omezeními; helper diagnostiky mají chyby a malý `NL` je rizikový, což definice hlídá. | Ne. |
+| [`JORB`](#jorb) | Funguje sériově; nativní MPI workflow nedojde k finálnímu JORB výstupu a neredukuje akumulátory. | Ne. |
+| [`JXC`](#jxc) | Funguje pro jednoduchý periodický kolineární workflow; obecný FREL tensor se symetricky ekvivalentními sousedy má nativní rotační bug a cluster SP-SREL scratch flow je nespolehlivý. | Ano. |
+| [`MECHECK`](#mecheck) | Funguje jen částečně: `NMEFORM` je nativně vždy přepsáno na 2, další consistency test je compile-time vypnutý a summary loop má chybu. | Ne. |
+| [`MEPLOT`](#meplot) | Funguje, až na nativní přepisování křivek při současném photon+electron scanu; definice tuto kombinaci odmítá. Význam `SEFIN` potřebuje fyzikální ověření. | Ne. |
+| [`NRAES`](#nraes) | Rozbité: `IAES` je jen částečně nulováno a convolution akumuluje do neinicializovaných oblastí. | Ano. |
+| [`NUCSSCPL`](#nucsscpl) | Rozbité: nativní kód deallocuje pole před první alokací, vynuluje matrix elements pro každý type a nutí mesh na 1. | Ne. |
+| [`OPTABS`](#optabs) | Funguje s velkými ALE: `TEMPEL<=1` nechává `KBT` neinicializované a `NOMEGA<NEB` může přepsat alokaci; definice tyto stavy zakazuje. | Ne. |
+| [`PHAGEN`](#phagen) | Funguje jako omezený ASA/VWN converter; NT=1, bez disorder, ne jako obecný phase-shift solver. | Ne. |
+| [`PLOT2DPOT`](#plot2dpot) | Funguje v ASA pro potential; FULLPOT větev jde do experimentálního PLY writeru a skončí před běžným plane-grid outputem. | Ne. |
+| [`PLOT2DPR`](#plot2dpr) | Částečně funguje: v ASA ve skutečnosti zapisuje jen potential; FULLPOT větev skončí v experimentálním PLY writeru. | Ne. |
+| [`PLOT2DRHO`](#plot2drho) | Prakticky neúplné: ASA density neumí; FULLPOT skončí v testovacím PLY writeru před běžným plane-grid writerem. | Ne. |
+| [`PLOTPOT`](#plotpot) | Funguje pro ASA i FULLPOT stored potential data. | Ne. |
+| [`PLOTPRS`](#plotprs) | Funguje s omezeními: magnetic spin/orb curves mohou kolidovat ve stejném datasetu a panel limits ignorují orbital contribution. | Ne. |
+| [`PLOTRHO`](#plotrho) | Rozbité: `RHORSQ` se alokuje jen v potential branch, ale standalone rho writer ho potřebuje. | Ne. |
+| [`PLOTSFN`](#plotsfn) | Funguje pro skutečný FULLPOT potential se shape-function daty. | Ne. |
+| [`POSANI`](#posani) | Funguje jen s kompatibilním `POSANIPREP`; nativní data path předpokládá `NQ=NT` a obecný `NQ!=NT` workflow je rozbitý. | Ano. |
+| [`POSANIPREP`](#posaniprep) | Funguje pro jednoduchý 3D ASA/FREL `NQ=NT`; export TAUQQ je pro obecné `NQ!=NT` rozbitý. Energii dna pozitronového pásu si uživatel musí zvolit. | Ano. |
+| [`POSANITAU`](#posanitau) | Funguje v auditovaném 3D ASA/FREL workflow; integrační energy bounds je třeba fyzikálně ověřit a enhancement factor je nativně fixní. | Ne. |
+| [`PSHIFT`](#pshift) | Funguje, ale resonance splitting je v některých případech nespolehlivý. | Ano. |
+| [`SCF`](#scf) | Funguje pro `BROYDEN2`, `ANDERSON` a `TCHEBY` v povoleném scope; `PULAY` není validní a `TCHEBY` není pro FULLPOT. | Ano. |
+| [`SIGMA`](#sigma) | Funguje s omezeními; Fermi-sea není zahrnuta automaticky a režimy používají fixní file conventions/ImE. | Ano. |
+| [`SOCPAR`](#socpar) | Funguje pro hlavní SOC výstup; exchange-related output má chybný label jednotek a jeden sign-flip test je nativně nedosažitelný. | Ano. |
+| [`SPLEED`](#spleed) | Funguje v konzervativním fixed-angle workflow; momentum-scan a alternativní polarizační větve nejsou auditovány. | Ano. |
+| [`STONER`](#stoner) | Funguje s omezeními; používá natvrdo VWN susceptibility kernel, malé DOS hodnoty nativně nahrazuje jednotkovým příspěvkem a nulové normalizace nejsou vždy ošetřeny. | Ne. |
+| [`T1`](#t1) | Rozbité pro numerický účel: nativní `RELT1` používá signed κ jako kladné počty mj kanálů, takže záporné kanály mizí a basis indexing je chybný. | Ne. |
+| [`TDOBS`](#tdobs) | Deklarovaný účel není prokázaný: nenašel se samostatný time-dependent observable implementation; jako generic DOS path může běžet sériově. | Ne. |
+| [`TORQUE`](#torque) | Funguje, ale vyžaduje rotated magnetic potential/geometry; běžný nerotovaný magnetic potential může nativně STOPnout a mixed occupancy používá první type. | Ano. |
+| [`TUTORIAL`](#tutorial) | Smíšený stav: YLM/JLX/JLX-ASYMPT a DOS-FEG/DOS-SS/DOS-CLU/DOS-BULK/GEN jsou použitelné; CHR-POT, POT-DECOMP/POT-XC, RWF-L/RWF-E a CORE-ALL mají specifické nativní chyby/omezení. | Ne. |
+| [`VBPES`](#vbpes) | Funguje s omezeními; VBUPS si nativně automaticky nevolí UV photon energy a výpočet závisí na kompatibilním TAU/final-state setupu. | Ano. |
+| [`WFPLOT`](#wfplot) | Funguje v ASA/FREL serial workflow; BAND používá jen první energy point, FULLPOT není podporován. | Ano. |
+| [`XAS`](#xas) | Funguje se známými ALE; static branch je použitelný, ale TAU compatibility a efektivní začátek energy scanu je nutné kontrolovat. Native MPI končí před XRAYSPEC. | Ano. |
+| [`XES`](#xes) | Ne zcela ověřené: RXES skončí ve sdílené absorption-rate větvi a output naming/interpretace je sdílená s XAS; fyzikální emission význam nebyl potvrzen. | Ano. |
+| [`XRS`](#xrs) | Rozbité pro spolehlivý numerický výsledek: nativní `SIG(NEMAX+50,...)` je nulováno jen do `NEMAX`, ale později se sčítá přes celý rozsah. | Ano (v manuálu je XRS alespoň jako podporovaný spectroscopy task; detailní 9.7 interface je širší). |
 
 ## Tasks
 
