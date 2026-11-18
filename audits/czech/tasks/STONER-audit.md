@@ -43,3 +43,26 @@ FULLPOT není pro STONER v check_input explicitně zakázán. Nevytvářím zák
 ## Ověření
 
 Aktuální regresní moduly: `test_stoner.py`. Jsou součástí společně ověřené sady vstupních parametrů a result_files (**1249 passed, 1 skipped**, 9. 11. 2026). Testy vstupu ověřují rozhraní a serializaci; necertifikují fyzikální hodnoty ani shodu serial/MPI. Samostatný numerický referenční výpočet tohoto tasku zde ověřen nebyl.
+
+## Podpora embeddingu — přímá kontrola 18. 11. 2026
+
+**Klasifikace: Ne (současný nativní kód není funkční pro embedded cluster).** Normálním executable je `kkrgen`; jeho clusterovým protějškem by byl `embgen` (`CLUGEN`), ale pro STONER zatím nesmí být automaticky vybrán. Zdroj `susc.f` je obecná susceptibilita, kdežto `GEN` pro task `STONER` **přímo** volá samostatnou rutinu `SUSC_GAMMA` implementovanou v `susc_gamma.f` (`gen.f:1592–1610`). Oba soubory byly nyní dostupné a analyzované.
+
+### Ověřená příčina selhání
+
+1. `CLUDRIVE` nastaví `ITBOT=NTHOST+1`, `ITTOP=NTHOST+NTCLU`, ale globální `NT=NTHOST+NTCLU` (`cludrive.f:414–425`). Aktivní typy pro samotný cluster tedy **nejsou** `1:NT`.
+2. Před clusterovým `GEN` uzavře existující `IFILCBWF` a otevře nový prázdný direct-access `SCRATCH` soubor (`cludrive.f:597–604`). Tím se případné hostitelské vlnové funkce z dřívější fáze **nezachovají**.
+3. `GEN` spustí `RUNSSITE` (`gen.f:744–746`); v běžné embedded větvi `SSITE` počítá/zapisuje vlnové funkce pouze pro `IT=ITBOT:ITTOP` (`ssite.f:143,613–625`, obdobně `fpssite.f:246,823–831`).
+4. `CALCDOS` vynuluje celé `DOBS_LTX` a naplní pouze `ITBOT:ITTOP` (`calcdos.f:246–253`). Přesto `GEN` předá `NEFTL` sestavené pro `IT=1:NT` (`gen.f:1601–1610`).
+5. **Rozhodující chyba:** `SUSC_GAMMA` iteruje `DO IT=1,NT` (`susc_gamma.f:77`), tedy nejprve hostitelským typem. Jeho prázdné DOS nahradí umělými hodnotami `NEFTL(IT,1:NL)=1`, `NEFT(IT)=NL` (`susc_gamma.f:82–91`). Následně **bez podmínky** volá `WAVFUN_READ_REL(IFILCBWF,IT,...)` (`susc_gamma.f:104–105`). Tato rutina čte direct-access záznam s číslem odvozeným od `IT` (`wavfun_read.f:158–169`) a na chybějící záznam reaguje `STOP_MESSAGE` (`wavfun_read.f:200–201`). Hostitelské vlnové funkce do nového souboru nebyly zapsány.
+6. Výstup na konci `SUSC_GAMMA` navíc prochází opět `IT=1:NT` (`susc_gamma.f:298–301`), takže by zahrnoval i umělé hostitelské Stonerovy parametry.
+
+Nejde o hypotetické riziko špatného TAU: **chybné rozsahy smyček jsou přímo doložené ve zdrojovém kódu**. V běžné **3D/bulk** konfiguraci (`SUB_SYSTEM='BULK'`) embedded průchod narazí na čtení nezapsaných hostitelských vlnových funkcí. **Výjimka pro 2D:** `init_mod_lattice.f:113–117` nastavuje `SUB_SYSTEM='I-ZONE'`; pak `gen.f:732–742` dočasně rozšíří `ITBOT/ITTOP` při `RUNSSITE` na všechny typy. Hostitelské vlnové funkce tedy mohou být zapsány a samotné čtení nemusí skončit chybou, **ale** `CALCDOS` stále naplní jen clusterový DOS a `SUSC_GAMMA` vyrobí umělé hostitelské `NEFTL=1` a zahrne je do výstupu. Podpora embeddingu tedy není korektní ani v této větvi. Samostatný numerický běh nativního executable nebyl proveden.
+
+### Minimální nativní oprava
+
+- V `susc_gamma.f` importovat `ITBOT,ITTOP` z `MOD_TYPES` a změnit hlavní `DO IT=1,NT` na `DO IT=ITBOT,ITTOP`.
+- Omezit na stejný interval výpis sumarizace na konci rutiny (aktuálně `IT=1,NT`, ř. 301); zároveň předávat/produkovat jen smysluplné hodnoty clusteru.
+- Projít, zda další diagnostiky, pomocné `SUSC_VWN` a `SUSC_ORBPOL` nepotřebují úpravy. Následně spustit reálný embedded test a porovnat parametry Stonera na clusterových atomech.
+
+**ASE2SPRKKR:** `supports_embedded_cluster=False` zůstává správně. Změna nativního programu je podmínkou pro povolení `embgen` při STONER. Výběr, původ a reuse TAU je nezávislá problematika a není součástí této klasifikace.

@@ -43,3 +43,26 @@ FULLPOT is not explicitly prohibited for STONER in check_input. I do not create 
 ## Verification
 
 Current regression modules: `test_stoner.py`. They are included in the integrated input-parameter and result_files suite (**1249 passed, 1 skipped**, 2026-11-09). Input tests check the interface and serialization; they do not certify physical results or serial/MPI agreement. No independent numerical reference calculation of this task was verified here.
+
+## Native embedding support — direct recheck, 18 November 2026
+
+**Classification: No (the current native implementation is broken for an embedded cluster).** The normal executable is `kkrgen` and its embedded equivalent is `embgen` (`CLUGEN`), but the latter must not be enabled for STONER. The generic susceptibility routine is `SUSC` in `susc.f`; for the `STONER` task `GEN` calls the distinct `SUSC_GAMMA` in `susc_gamma.f` **directly** (`gen.f:1592–1610`). Both source files have now been retrieved and inspected.
+
+### Confirmed native failure path
+
+1. `CLUDRIVE` sets `ITBOT=NTHOST+1`, `ITTOP=NTHOST+NTCLU`, with global `NT=NTHOST+NTCLU` (`cludrive.f:414–425`). Cluster-active types are **not** `1:NT`.
+2. Immediately before cluster `GEN`, `CLUDRIVE` closes the old `IFILCBWF` and opens a **fresh empty direct-access scratch** wave-function file (`cludrive.f:597–604`). Host wave functions from a previous phase are no longer present in this file.
+3. `GEN` runs `RUNSSITE` (`gen.f:744–746`); for the ordinary embedded path `SSITE` solves/writes wave functions only for `IT=ITBOT:ITTOP` (`ssite.f:143,613–625`, analogous `fpssite.f:246,823–831`).
+4. `CALCDOS` clears all `DOBS_LTX` and populates only `ITBOT:ITTOP` (`calcdos.f:246–253`), while `GEN` assembles the `NEFTL` input array for all `IT=1:NT` (`gen.f:1601–1610`).
+5. **Fatal mismatch:** `SUSC_GAMMA` unconditionally loops over `IT=1,NT` (`susc_gamma.f:77`), including host types first. For host DOS zeroes it fabricates `NEFTL(IT,1:NL)=1` and `NEFT(IT)=NL` (`susc_gamma.f:82–91`). It then **unconditionally** reads `WAVFUN_READ_REL(IFILCBWF,IT,...)` (`susc_gamma.f:104–105`). That reader fetches type-indexed direct-access records (`wavfun_read.f:158–169`) and raises `STOP_MESSAGE` for an absent record (`wavfun_read.f:200–201`). Host records were not written to this newly opened file.
+6. Final output again iterates over `IT=1,NT` (`susc_gamma.f:298–301`), which would also include fictitious host Stoner values.
+
+This is **a source-proven loop/data mismatch**, not an uncertainty about TAU choice. The usual **3D/bulk** embedded path (`SUB_SYSTEM='BULK'`) reaches an unwritten host wave-function record. **2D exception:** `init_mod_lattice.f:113–117` selects `SUB_SYSTEM='I-ZONE'`; in that case `gen.f:732–742` temporarily widens the `RUNSSITE` range to all types. Host wave functions may thus be written, avoiding the immediate read error, **but** `CALCDOS` still populates only cluster DOS and `SUSC_GAMMA` fabricates host `NEFTL=1` and prints host contributions. Hence the native implementation is not correct for embedding in either case. No native numerical executable was run in this audit.
+
+### Minimal native repair
+
+- Import `ITBOT,ITTOP` from `MOD_TYPES` inside `susc_gamma.f` and iterate `IT=ITBOT,ITTOP` instead of `IT=1,NT`.
+- Restrict the final output implied-DO list to those same active cluster types and avoid returning fabricated host-type Stoner values.
+- Review helper routine behavior (`SUSC_VWN`, `SUSC_ORBPOL`) and run a true embedded integration calculation to validate cluster-site Stoner values.
+
+**ASE2SPRKKR:** Keep `supports_embedded_cluster=False`; native changes are necessary before STONER can select `embgen`. Correct TAU selection/provenance/reuse is a separate input management issue and does not influence this classification.
