@@ -38,7 +38,7 @@ Normal calculations use the executable specified by their task definition. True 
 
 ## Index
 
-| Task | Operational status | Embedding (SPR-KKR 9.7) | Manual coverage  Executable (normal → embedding) |
+| Task | Operational status | Embedding (SPR-KKR 9.7) | Manual coverage | Executable (normal → embedding) |
 |---|---|---|---|---|
 | [`AES`](#aes) | Works only in the limited audited workflow; NQ=1, no f shells, with cache/TAU-capacity risks. The numerical solver was not run during the audit. | **No** | Yes. | `kkrgen` → — |
 | [`AIPES`](#aipes) | Works in the audited fixed-geometry workflow; it is not numerical integration of ARPES over angles. | **No** | Yes. | `kkrspec` → — |
@@ -397,7 +397,7 @@ Normal calculations use the executable specified by their task definition. True 
 - **Embedding (native SPR-KKR 9.7):** **Yes** — FREL embedding calls `CLUXCPLTENSOR` and writes both J and D products (`*_JJij.dat`, `*_Dij_[xyz].dat`), even in DMI-only mode (`gen.f:967–1000`; `cluxcpltensor.f:278,432–440`); this is not periodic `DMIVECTOR`.
 - **Executable (normal / embedding):** `kkrgen` → `embgen`
 - **Input files:** standard input + `POTFIL`.
-- **Output files:** `{DATASET_ADSI}_DMIVEC_Dij.dat`; optional component plots `{DATASET_ADSI}_DMIVEC_Dij_[xyz]_*.agr`.
+- **Output files:** `{DATASET_ADSI}_DMIVEC_Dij.dat`; optional component plots `{DATASET_ADSI}_DMIVEC_Dij_[xyz]_*.agr`. **Embedded FREL:** `CLUXCPLTENSOR` writes `{DATASET_ADSI}_JJij.dat` and `{DATASET_ADSI}_Dij_[xyz].dat` even for DMI-only runs, plus corresponding AGR plots (`cluxcpltensor.f`).
 - **In the SPR-KKR manual:** No as a separate task in the available manual; JXC is documented.
 - **Parameters covered by the manual:** —
 - **Parameters not covered by the manual:** `TASK.DMI`, `TASK.JXC`, `TASK.CLURAD`, `TASK.NSHLCLU`, `TASK.SELECT`, `TASK.EXCLUDE`, `TASK.QREPONLY`
@@ -543,7 +543,7 @@ Normal calculations use the executable specified by their task definition. True 
 - **Embedding (native SPR-KKR 9.7):** **Yes** — The explicitly supported route is FREL `CLUXCPLTENSOR` (`gen.f:967–1000`, `cluxcpltensor.f:63–69`), producing `*_JJij.dat` and `*_Dij_[xyz].dat`. SP-SREL `CLUXCPLJIJ` depends on `IBZINT` and is not treated here as a validated embedded workflow.
 - **Executable (normal / embedding):** `kkrgen` → `embgen`
 - **Input files:** standard input + `POTFIL`.
-- **Output files:** Depending on relativistic mode: `{DATASET_ADSI}_J_ij.dat` / `{DATASET_ADSI}_Jij_*.agr` or `{DATASET_ADSI}_XCPLTEN_Jij.dat` / `..._Jij_*.agr`; optional DMI files when enabled.
+- **Output files:** Periodic: `{DATASET_ADSI}_J_ij.dat` / `{DATASET_ADSI}_Jij_*.agr` (SP-SREL) or `{DATASET_ADSI}_XCPLTEN_Jij.dat` and `XCPLTEN_*` plots (FREL); periodic DMI produces `DMIVEC_*`. **Embedded FREL:** `{DATASET_ADSI}_JJij.dat`, `{DATASET_ADSI}_Jij_*.agr`, `{DATASET_ADSI}_Dij_x.dat`, `_Dij_y.dat`, `_Dij_z.dat` and `Dij_[xyz]_*.agr` (`cluxcpltensor.f:278,432–440`).
 - **In the SPR-KKR manual:** Yes.
 - **Parameters covered by the manual:** `TASK.CLURAD`
 - **Parameters not covered by the manual:** `TASK.JXC`, `TASK.DMI`, `TASK.NSHLCLU`, `TASK.SELECT`, `TASK.EXCLUDE`, `TASK.QREPONLY`
