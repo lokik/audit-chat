@@ -43,3 +43,23 @@ FULLPOT is not explicitly prohibited for STONER in check_input. I do not create 
 ## Verification
 
 Current regression modules: `test_stoner.py`. They are included in the integrated input-parameter and result_files suite (**1249 passed, 1 skipped**, 2026-11-09). Input tests check the interface and serialization; they do not certify physical results or serial/MPI agreement. No independent numerical reference calculation of this task was verified here.
+
+## Native embedding support — follow-up review, 18 November 2026
+
+**Classification: Conditional; this does not enable the task in ASE2SPRKKR.**
+The normal executable is `kkrgen`, whereas embedded clusters require `embgen` (the native `CLUGEN` program), not the generic executable with an additional option.
+
+### Reachable native data path
+
+1. `initvar.f:384–390` selects STONER and requests TAU cache reuse with `RDTAUDIR=.TRUE.`, `ICORE=0`, `NOWRDOS=.TRUE.`. That is a request to reuse cache, **not** proof of unconditional cache reading.
+2. `kkrmain.f:932–959` checks `TAU_DIR_INQUIRE`. If the cache is **unavailable**, it sets `RDTAUDIR=.FALSE.` and `RUNELOOP=.TRUE.`. This corrects the earlier misconception that STONER can only load host TAU.
+3. `cludrive.f:398–425,619–658` constructs the host+cluster system, restricts active types to `NTHOST+1:NTHOST+NTCLU`, and calls `GEN` from `CLUGEN`. `gen.f:744–807` generates site radial wave functions and, with `RDTAUDIR=.FALSE.`, calls `TAU_DRIVE` rather than `TAU_DIR_READ`, making the embedded scattering route reachable as with DOS.
+4. `gen.f:869–875` computes local DOS via `CALCDOS`, and `gen.f:1592–1610` calls `SUSC_GAMMA`. Thus the native STONER routine is reachable with potentially embedded inputs.
+
+### Gaps preventing a positive support claim
+
+- **Cache provenance:** If a `TAUDIR` is found, `RDTAUDIR` remains true and `gen.f:788–790` loads the cached TAU; a host-only cache could give a physically invalid cluster result. Existing TAU energy-grid checks are not a demonstrated host+cluster identity check. The current task definition does not force a clean embedded TAU calculation.
+- **Type indexing:** `calcdos.f:246–253` clears all `DOBS_LTX` but populates only `ITBOT:ITTOP` (cluster types). `gen.f:1601–1605` then copies `NEFTL` for **all** `IT=1..NT`. Whether `SUSC_GAMMA` correctly restricts its own processing to active cluster types and ignores host zeros has not been established in this recheck. The earlier source review also noted a small-DOS unit fallback (`susc_gamma.f:87–90`).
+- **Numerical validity:** There is no end-to-end native `embgen` run or comparison with host and cluster reference values. The periodic FREL, `NL>=3`, VWN-kernel and serial-mode limitations remain.
+
+**ASE2SPRKKR policy:** Retain `TaskDefinition.supports_embedded_cluster=False` and do **not** select `embgen` for STONER until `SUSC_GAMMA` active-type behavior, TAU cache identity, and a native integration test are verified.
