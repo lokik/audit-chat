@@ -57,7 +57,7 @@ Current regression modules: `test_stoner.py`. They are included in the integrate
 5. **Fatal mismatch:** `SUSC_GAMMA` unconditionally loops over `IT=1,NT` (`susc_gamma.f:77`), including host types first. For host DOS zeroes it fabricates `NEFTL(IT,1:NL)=1` and `NEFT(IT)=NL` (`susc_gamma.f:82–91`). It then **unconditionally** reads `WAVFUN_READ_REL(IFILCBWF,IT,...)` (`susc_gamma.f:104–105`). That reader fetches type-indexed direct-access records (`wavfun_read.f:158–169`) and raises `STOP_MESSAGE` for an absent record (`wavfun_read.f:200–201`). Host records were not written to this newly opened file.
 6. Final output again iterates over `IT=1,NT` (`susc_gamma.f:298–301`), which would also include fictitious host Stoner values.
 
-This is **a source-proven loop/data mismatch**, not an uncertainty about TAU choice. The ordinary embedded path reaches an unwritten host wave-function record. No native numerical executable was run in this audit.
+This is **a source-proven loop/data mismatch**, not an uncertainty about TAU choice. The usual **3D/bulk** embedded path (`SUB_SYSTEM='BULK'`) reaches an unwritten host wave-function record. **2D exception:** `init_mod_lattice.f:113–117` selects `SUB_SYSTEM='I-ZONE'`; in that case `gen.f:732–742` temporarily widens the `RUNSSITE` range to all types. Host wave functions may thus be written, avoiding the immediate read error, **but** `CALCDOS` still populates only cluster DOS and `SUSC_GAMMA` fabricates host `NEFTL=1` and prints host contributions. Hence the native implementation is not correct for embedding in either case. No native numerical executable was run in this audit.
 
 ### Minimal native repair
 
