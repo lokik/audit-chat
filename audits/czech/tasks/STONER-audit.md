@@ -58,6 +58,8 @@ Běžný executable je `kkrgen`; pro embedded cluster se používá speciální 
 
 ### Nevyřešené otázky vlastní podpory embeddingu
 
+**Přímá kontrola `SUSC_GAMMA` (18. 11. 2026):** Zpřístupněná sada zdrojů `PUB9.7_260420_18h13` v knihovně obsahuje 478 souborů a končí abecedně na `scfmad0d_back.f`; `susc_gamma.f` v ní není. V otevřených podkladech nebylo možné získat její kompletní zdroj. Proto **nelze tvrdit, že bylo ověřeno**, zda vlastní smyčky `SUSC_GAMMA` běží přes `ITBOT:ITTOP`, nebo přes `1:NT`. Z doložených `gen.f:1592–1610`, `calcdos.f:246–253` a `cludrive.f:414–425` lze potvrdit pouze: `NEFTL` má hodnoty DOS clusteru a nulové hodnoty hostitele a celé pole se předá rutině `SUSC_GAMMA`. Samotné předání všech prvků není důkazem jejich použití. **Vhodné ověření**: získat kompletní `susc_gamma.f`, projít všechny vnější smyčky přes typy, `WAVFUN_READ_REL`, výpočet `NEFT` a DOS fallback a zjistit, zda se hostitelské typy dostávají do akumulovaných výsledků. Výběr TAU je samostatný problém a v tomto hodnocení nepředstavuje omezení.
+
 - **Indexy atomových typů:** `calcdos.f:246–253` vynuluje celé `DOBS_LTX` a naplní jen `ITBOT:ITTOP`, tj. cluster. `gen.f:1601–1605` přesto sestaví `NEFTL` pro **všech** `IT=1..NT`. Zda `SUSC_GAMMA` správně omezuje vlastní smyčky na `ITBOT:ITTOP` a nepoužívá nuly hostitele (případně je nenahrazuje umělými jednotkami), není v této revizi potvrzeno. Starší audit upozornil i na fallback `NEFTL=1` při malém DOS (`susc_gamma.f:87–90`).
 - **Numerika:** chybí nativní end-to-end test pro `embgen`, nezávislé srovnání s hostitelským a clusterovým referenčním výpočtem i ověření významu lokálního Stonerova parametru. Standardní omezení FREL, `NL>=3`, VWN kernelu a vypnutého MPI tím nezanikají.
 
