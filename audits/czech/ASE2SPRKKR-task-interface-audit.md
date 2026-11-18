@@ -32,6 +32,8 @@ Tato revize samostatně klasifikuje **nativní podporu embeddingu v SPR-KKR 9.7*
 
 ### Výběr executable
 
+**Výsledek hloubkové kontroly 18. 11. 2026:** Mezi sedmi dříve nedoloženými tasky jsou `APS`, `COMPTON`, `POSANI`, `POSANIPREP` a `VBPES` nově **Ne** kvůli neslučitelnému původnímu DOS, periodickým k-prostorovým operátorům či chybějící embedded final-state cestě. `POSANITAU` je **Podmíněně**: `posanipot.f` obsahuje explicitní clusterovou větev, ale fyzikální normalizace do hostitele není doložena. `STONER` zůstává **Nedoloženo**, protože `SUSC_GAMMA` je lokální postprocessing a bez plného ověření jeho datového kontraktu pro cluster není možné dát pozitivní status. Speciální executable zůstává mimo `ase2sprkkr` povolený jen pro explicitní tasky `SCF`, `DOS`, `JXC`, `DMI`.
+
 Pro běžné výpočty se používá executable uvedený v registru tasků. Skutečný embedding vyžaduje **speciální** program `embscf` (`CLUSCF`) nebo `embgen` (`CLUGEN`), nikoli generický `kkrscf`/`kkrgen`. `KKRSPEC` a `KKRCHI` nemají ekvivalentní funkční embeddingový driver. U položek **Podmíněně**/**Nedoloženo** znamená uvedený `embgen?` pouze hypotetickou vstupní cestu přes `CLUGEN`, nikoli aktuálně povolený executable v `ase2sprkkr`. `BSF` je pouze schéma, které používají aliasy `BSFEK`/`BSFKK`.
 
 **Rozšířená kontrola 18. 11.:** `PLOTRHO`, `NRAES` a `T1` jsou nově **Ne** kvůli doloženým nativním chybám nezávislým na embeddingu. FREL JXC/DMI ve skutečnosti zapisují `*_JJij.dat` a `*_Dij_[xyz].dat`, nikoli periodická `XCPLTEN_*`/`DMIVEC_*`; pravidlo `TAU.BZINT=POINTS` se vztahuje k hostitelským `TAUIJ` a nemá se bez ověření měnit na `CLUSTER`. SP-SREL cluster JXC není zatím bezpečně povolen.
@@ -42,7 +44,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 |---|---|---|---|---|
 | [`AES`](#aes) | Funguje jen v omezeném auditovaném workflow; NQ=1, bez f-shellů a s riziky v cache/TAU kapacitě. Numerický solver nebyl v auditu spuštěn. | **Ne** | Ano. | `kkrgen` → — |
 | [`AIPES`](#aipes) | Funguje v auditovaném fixed-geometry workflow; není to numerická integrace ARPES přes úhly. | **Ne** | Ano. | `kkrspec` → — |
-| [`APS`](#aps) | Funguje s kompatibilním starým DOS; pozitivní `GAMMA` broadening má nativní problematickou větev. | **Nedoloženo** | Ano. | `kkrgen` → `embgen?` |
+| [`APS`](#aps) | Funguje s kompatibilním starým DOS; pozitivní `GAMMA` broadening má nativní problematickou větev. | **Ne** | Ano. | `kkrgen` → — |
 | [`ARPES`](#arpes) | Nativní ARPES workflow je v auditovaném rozsahu smysluplné. Současné rozhraní používá správné presence-sensitive `TASK.CRYS_VECS`; pokročilé numerické větve nejsou ověřené. | **Ne** | Ano. | `kkrspec` → — |
 | [`BAND`](#band) | Funguje v auditovaném workflow; selhání eigen-solveru může nativně pokračovat až k `LOG(0)`. Není to `BSF` ani `EKREL`. | **Ne** | Ano. | `kkrspec` → — |
 | [`BONDING`](#bonding) | Rozbité: běžný `TAU_DRIVE` připraví `KTAUIJ=0`, ale `CLUBONDING` čte scratch jednotky vyžadující `KTAUIJ>=2`. | **Ne** | Ne. | `kkrgen` → — |
@@ -55,7 +57,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 | [`CHIXAS`](#chixas) | Funguje jen při fyzikálně konzistentních externích `NEF/CHISPN/CHIVV`; univerzální bezpečné defaulty neexistují. | **Ne** | Ne. | `kkrchi` → — |
 | [`CLPES`](#clpes) | Funguje v auditovaném sériovém fixed-geometry workflow; CPA a některé polarizační režimy nativně stopnou, při `NE=1` je nutné hlídat core-state index. | **Ne** | Ne. | `kkrspec` → — |
 | [`CLXPS`](#clxps) | Funguje v auditovaném ASA/FREL workflow; advanced angular geometries a numerický output nebyly samostatně certifikovány. | **Podmíněně** | Ano. | `kkrgen` → `embgen?` |
-| [`COMPTON`](#compton) | Funguje s omezeními; `EMD2D` má při nenulovém `PNMAX` dvojí škálování a posunuté sudé mřížky ztrácejí krajní body. | **Nedoloženo** | Ano. | `kkrgen` → `embgen?` |
+| [`COMPTON`](#compton) | Funguje s omezeními; `EMD2D` má při nenulovém `PNMAX` dvojí škálování a posunuté sudé mřížky ztrácejí krajní body. | **Ne** | Ano. | `kkrgen` → — |
 | [`DMI`](#dmi) | Funguje s významnými ALE: jednotlivé DMI komponenty nejsou v nativním zdroji ekvivalentní (zejména Dz) a je nutné ověřovat frame/multiplicity/radius. | **Ano** | Ne jako samostatný task v dostupném manuálu; JXC je popsán. | `kkrgen` → `embgen` |
 | [`DOS`](#dos) | Funguje. | **Ano** | Ano. | `kkrgen` → `embgen` |
 | [`EKREL`](#ekrel) | Funguje; CPA je nativně odmítnuto, pro disorder se má použít BSF. | **Ne** | Ano. | `kkrgen` → — |
@@ -78,9 +80,9 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 | [`PLOTPRS`](#plotprs) | Funguje s omezeními: magnetic spin/orb curves mohou kolidovat ve stejném datasetu a panel limits ignorují orbital contribution. | **Podmíněně** | Ne. | `kkrgen` → `embgen?` |
 | [`PLOTRHO`](#plotrho) | Rozbité: `RHORSQ` se alokuje jen v potential branch, ale standalone rho writer ho potřebuje. | **Ne** | Ne. | `kkrgen` → — |
 | [`PLOTSFN`](#plotsfn) | Funguje pro skutečný FULLPOT potential se shape-function daty. | **Podmíněně** | Ne. | `kkrgen` → `embgen?` |
-| [`POSANI`](#posani) | Funguje jen s kompatibilním `POSANIPREP`; nativní data path předpokládá `NQ=NT` a obecný `NQ!=NT` workflow je rozbitý. | **Nedoloženo** | Ano. | `kkrgen` → `embgen?` |
-| [`POSANIPREP`](#posaniprep) | Funguje pro jednoduchý 3D ASA/FREL `NQ=NT`; export TAUQQ je pro obecné `NQ!=NT` rozbitý. Energii dna pozitronového pásu si uživatel musí zvolit. | **Nedoloženo** | Ano. | `kkrgen` → `embgen?` |
-| [`POSANITAU`](#posanitau) | Funguje v auditovaném 3D ASA/FREL workflow; integrační energy bounds je třeba fyzikálně ověřit a enhancement factor je nativně fixní. | **Nedoloženo** | Ne. | `kkrgen` → `embgen?` |
+| [`POSANI`](#posani) | Funguje jen s kompatibilním `POSANIPREP`; nativní data path předpokládá `NQ=NT` a obecný `NQ!=NT` workflow je rozbitý. | **Ne** | Ano. | `kkrgen` → — |
+| [`POSANIPREP`](#posaniprep) | Funguje pro jednoduchý 3D ASA/FREL `NQ=NT`; export TAUQQ je pro obecné `NQ!=NT` rozbitý. Energii dna pozitronového pásu si uživatel musí zvolit. | **Ne** | Ano. | `kkrgen` → — |
+| [`POSANITAU`](#posanitau) | Funguje v auditovaném 3D ASA/FREL workflow; integrační energy bounds je třeba fyzikálně ověřit a enhancement factor je nativně fixní. | **Podmíněně** | Ne. | `kkrgen` → `embgen?` |
 | [`PSHIFT`](#pshift) | Funguje, ale resonance splitting je v některých případech nespolehlivý. | **Podmíněně** | Ano. | `kkrgen` → `embgen?` |
 | [`SCF`](#scf) | Funguje pro `BROYDEN2`, `ANDERSON` a `TCHEBY` v povoleném scope; `PULAY` není validní a `TCHEBY` není pro FULLPOT. | **Ano** | Ano. | `kkrscf` → `embscf` |
 | [`SIGMA`](#sigma) | Funguje s omezeními; Fermi-sea není zahrnuta automaticky a režimy používají fixní file conventions/ImE. | **Ne** | Ano. | `kkrchi` → — |
@@ -91,7 +93,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 | [`TDOBS`](#tdobs) | Deklarovaný účel není prokázaný: nenašel se samostatný time-dependent observable implementation; jako generic DOS path může běžet sériově. | **Ne** | Ne. | `kkrgen` → — |
 | [`TORQUE`](#torque) | Funguje, ale vyžaduje rotated magnetic potential/geometry; běžný nerotovaný magnetic potential může nativně STOPnout a mixed occupancy používá první type. | **Podmíněně** | Ano. | `kkrgen` → `embgen?` |
 | [`TUTORIAL`](#tutorial) | Smíšený stav: YLM/JLX/JLX-ASYMPT a DOS-FEG/DOS-SS/DOS-CLU/DOS-BULK/GEN jsou použitelné; CHR-POT, POT-DECOMP/POT-XC, RWF-L/RWF-E a CORE-ALL mají specifické nativní chyby/omezení. | **Ne** | Ne. | `kkrgen` → — |
-| [`VBPES`](#vbpes) | Funguje s omezeními; VBUPS si nativně automaticky nevolí UV photon energy a výpočet závisí na kompatibilním TAU/final-state setupu. | **Nedoloženo** | Ano. | `kkrgen` → `embgen?` |
+| [`VBPES`](#vbpes) | Funguje s omezeními; VBUPS si nativně automaticky nevolí UV photon energy a výpočet závisí na kompatibilním TAU/final-state setupu. | **Ne** | Ano. | `kkrgen` → — |
 | [`WFPLOT`](#wfplot) | Funguje v ASA/FREL serial workflow; BAND používá jen první energy point, FULLPOT není podporován. | **Podmíněně** | Ano. | `kkrgen` → `embgen?` |
 | [`XAS`](#xas) | Funguje se známými ALE; static branch je použitelný, ale TAU compatibility a efektivní začátek energy scanu je nutné kontrolovat. Native MPI končí před XRAYSPEC. | **Podmíněně** | Ano. | `kkrgen` → `embgen?` |
 | [`XES`](#xes) | Ne zcela ověřené: RXES skončí ve sdílené absorption-rate větvi a output naming/interpretace je sdílená s XAS; fyzikální emission význam nebyl potvrzen. | **Podmíněně** | Ano. | `kkrgen` → `embgen?` |
@@ -139,8 +141,8 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 - **Co dělá:** Počítá appearance-potential spectrum postprocessingem dříve spočteného DOS.
 - **Stav:** Funguje s kompatibilním starým DOS; pozitivní `GAMMA` broadening má nativní problematickou větev.
-- **Embedding (nativní SPR-KKR 9.7):** **Nedoloženo** — `GEN` obsahuje `NRAPS`, ale nevytváří pro APS ověřený embeddingový kontrakt vstupního DOS a vazby na cluster (`gen.f:1414–1424`, `cludrive.f:631–658`).
-- **Executable (běžný / embedding):** `kkrgen` → `embgen?` (pouze hypotetická cesta, ve větvi `cluster` nepovoleno)
+- **Embedding (nativní SPR-KKR 9.7):** **Ne** — `initvar.f:281–287` předepisuje čtení existujícího starého DOS a vypnutou energetickou smyčku, ale `cludrive.f:631–655` v `CLUGEN` násilně nastaví `RUNELOOP=.TRUE.` a znovu otevře a přepisuje `{DATSET}.dos` jako výstup. `NRAPS` právě z tohoto DOS čte (`nraps.f:829–863`). Nativní cluster driver tudíž neudržuje vstupní kontrakt APS; nejde o ověřenou embeddingovou úlohu.
+- **Executable (běžný / embedding):** `kkrgen` → žádný podporovaný embeddingový executable
 - **Vstupní soubory:** Generovaný vstup + `POTFIL` + existující `{DATASET_ADSI}.dos` (starý spinově rozlišený formát a dostatečná kapacita).
 - **Výstupní soubory:** `{DATASET_ADSI}.<type>.<core-shell>.aps`; pro `GAMMA>0` také `{DATASET_ADSI}.dos.brd`, případně soubory CALCLS/OUTGNU.
 - **V SPR-KKR manuálu:** Ano.
@@ -376,8 +378,8 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 - **Co dělá:** Počítá elektronovou Comptonovu momentum density a profily.
 - **Stav:** Funguje s omezeními; `EMD2D` má při nenulovém `PNMAX` dvojí škálování a posunuté sudé mřížky ztrácejí krajní body.
-- **Embedding (nativní SPR-KKR 9.7):** **Nedoloženo** — `GEN` volá `COMPTON`, avšak nebyla nalezena speciální implementace spektrálního výstupu nad embeddingovým `TAU` (`gen.f:1555–1567`).
-- **Executable (běžný / embedding):** `kkrgen` → `embgen?` (pouze hypotetická cesta, ve větvi `cluster` nepovoleno)
+- **Embedding (nativní SPR-KKR 9.7):** **Ne** — `COMPTON` v `compton.f:917–935` pro momentum-resolved část volá `STRSET` a `SETKKR`, následně invertuje periodickou k-prostorovou matici místo použití embeddingového scattering-path operátoru z `CLUDRIVE`; `compton.f:633–654` navíc čte externí TAU cache. Kód neobsahuje ekvivalentní clusterovou formulaci.
+- **Executable (běžný / embedding):** `kkrgen` → žádný podporovaný embeddingový executable
 - **Vstupní soubory:** Generovaný vstup + `POTFIL` + povinná kompatibilní elektronová TAU directory (`TAUDIR`/`TAUPATH`).
 - **Výstupní soubory:** `{DATASET_ADSI}_BND.mcp`, `{DATASET_ADSI}_COR.mcp`, `{DATASET_ADSI}_TOT.mcp`.
 - **V SPR-KKR manuálu:** Ano.
@@ -795,8 +797,8 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 - **Co dělá:** Počítá pozitronovou annihilation momentum density a profily.
 - **Stav:** Funguje jen s kompatibilním `POSANIPREP`; nativní data path předpokládá `NQ=NT` a obecný `NQ!=NT` workflow je rozbitý.
-- **Embedding (nativní SPR-KKR 9.7):** **Nedoloženo** — `GEN` má větev `COMPTON/POSANI`, ale nebyla nalezena funkční, samostatně auditovaná embedded positronová cesta ani kompatibilita předchozích vstupů (`gen.f:1555–1567`).
-- **Executable (běžný / embedding):** `kkrgen` → `embgen?` (pouze hypotetická cesta, ve větvi `cluster` nepovoleno)
+- **Embedding (nativní SPR-KKR 9.7):** **Ne** — `POSANI` používá totožný periodický k-prostorový `COMPTON` driver (`gen.f:1572–1577`, `compton.f:917–935`) a závisí na periodických pozitronových párových datech `{DATSET}_pos_dat.pan` (`compton.f:424–426`). Prosté spuštění pod `CLUGEN` nenahradí periodickou finální integraci embeddingovým TAU.
+- **Executable (běžný / embedding):** `kkrgen` → žádný podporovaný embeddingový executable
 - **Vstupní soubory:** Generovaný vstup + elektronový `POTFIL` + povinné elektronové TAU + `{DATASET_ADSI}_pos_dat.pan` z POSANIPREP.
 - **Výstupní soubory:** `{DATASET_ADSI}_BND.mpa`, `_COR.mpa`, `_TOT.mpa`; podle voleb také `..._pan2d.dat` nebo `..._data.mpa`.
 - **V SPR-KKR manuálu:** Ano.
@@ -813,8 +815,8 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 - **Co dělá:** Připraví s-like pozitronový stav, wavefunctions a scattering data pro `POSANI`.
 - **Stav:** Funguje pro jednoduchý 3D ASA/FREL `NQ=NT`; export TAUQQ je pro obecné `NQ!=NT` rozbitý. Energii dna pozitronového pásu si uživatel musí zvolit.
-- **Embedding (nativní SPR-KKR 9.7):** **Nedoloženo** — V `GEN` existuje `POSANIPREPARE` (`gen.f:1546–1554`), nikoli však doložený host+cluster kontrakt pro pozitronové stavy.
-- **Executable (běžný / embedding):** `kkrgen` → `embgen?` (pouze hypotetická cesta, ve větvi `cluster` nepovoleno)
+- **Embedding (nativní SPR-KKR 9.7):** **Ne** — `POSANIPREPARE` explicitně vytváří periodickou k-mřížku a volá `KLOOPSIJ` pro `TAUQQ` (`posaniprep.f:116–145`), místo clusterových `TAUIJ`. Export `TAUQQ` navíc iteruje přes typy `NT`, nikoli místa `NQ` (`posaniprep.f:268–272`). Nemá správnou embedded-cluster implementaci.
+- **Executable (běžný / embedding):** `kkrgen` → žádný podporovaný embeddingový executable
 - **Vstupní soubory:** standardní vstup + elektronový `POTFIL`.
 - **Výstupní soubory:** `{DATASET_ADSI}_pos_dat.pan`.
 - **V SPR-KKR manuálu:** Ano.
@@ -831,7 +833,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 - **Co dělá:** Integruje pozitronovou hustotu a počítá annihilation rate/lifetime.
 - **Stav:** Funguje v auditovaném 3D ASA/FREL workflow; integrační energy bounds je třeba fyzikálně ověřit a enhancement factor je nativně fixní.
-- **Embedding (nativní SPR-KKR 9.7):** **Nedoloženo** — Pozitronová TAU/density větev existuje v `GEN` (`gen.f:1509–1544`); využití embedded `TAUIJ` a správné přiřazení míst nebylo ověřeno.
+- **Embedding (nativní SPR-KKR 9.7):** **Podmíněně** — Na rozdíl od `POSANI` má skutečnou cluster-aware cestu: `POSANIPOT` zpracovává `NTCLU` a posouvá potenciál clusterových atomů (`posanipot.f:95–110,267–275`), `GEN` využívá `TAU_DRIVE` a následně `CHRDNS`/`POSANILAMBDA` (`gen.f:783–807,882–897,1509–1564`). `POSANILAMBDA` integruje vybrané typy `ITBOT:ITTOP` (`posanilambda.f:59–105`); normalizace v konečném clusteru a příspěvek hostitele nejsou fyzikálně ověřeny. Pouze podmíněná nativní cesta, v `ase2sprkkr` nepovolena.
 - **Executable (běžný / embedding):** `kkrgen` → `embgen?` (pouze hypotetická cesta, ve větvi `cluster` nepovoleno)
 - **Vstupní soubory:** Generovaný vstup + elektronový `POTFIL`; volitelná cache `{DATASET_ADSI}_positron.rho`.
 - **Výstupní soubory:** Nativní lifetime/rate ve výstupu programu; volitelná cache `{DATASET_ADSI}_positron.rho`.
@@ -1029,8 +1031,8 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 - **Co dělá:** Počítá úhlově integrovanou valenční photoemission v KKRGEN, odděleně od KKRSPEC ARPES.
 - **Stav:** Funguje s omezeními; VBUPS si nativně automaticky nevolí UV photon energy a výpočet závisí na kompatibilním TAU/final-state setupu.
-- **Embedding (nativní SPR-KKR 9.7):** **Nedoloženo** — `GEN` volá `VBPES` (`gen.f:1450–1455`), ale finální/surface-state výpočet nad embedded lokálním clusterem nemá doloženou kompatibilní geometrii a stavový kontrakt.
-- **Executable (běžný / embedding):** `kkrgen` → `embgen?` (pouze hypotetická cesta, ve větvi `cluster` nepovoleno)
+- **Embedding (nativní SPR-KKR 9.7):** **Ne** — Periodické fotoemisní workflow používá existující elektronickou TAU directory a vlastní k-prostorovou přípravu finálních stavů (`initvar.f:221–255`, `gen.f:1445–1450`, viz individuální audit `vbpes.f:282–291`). Nebyla nalezena embeddingová konstrukce finálních stavů ani clusterové mapování fotoemisních maticových elementů. Nativní cesta `CLUGEN` tak není podporou tohoto tasku.
+- **Executable (běžný / embedding):** `kkrgen` → žádný podporovaný embeddingový executable
 - **Vstupní soubory:** Generovaný vstup + `POTFIL` + povinné TAU počátečního stavu; volitelná cache finálního stavu `{DATASET_ADSI}.tau.dir.F_<photon>`.
 - **Výstupní soubory:** Pevná jména `arpes.dat`, `arpes_spol.dat`, `spin.matrix.xps`; volitelný finální `{DATASET_ADSI}.dos.F_<photon>`.
 - **V SPR-KKR manuálu:** Ano.
