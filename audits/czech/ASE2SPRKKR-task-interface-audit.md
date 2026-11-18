@@ -38,7 +38,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 
 ## Index
 
-| Task | Stručný stav | Embedding (SPR-KKR 9.7) | Pokrytí manuálem  Executable (běžný → embedding) |
+| Task | Stručný stav | Embedding (SPR-KKR 9.7) | Pokrytí manuálem | Executable (běžný → embedding) |
 |---|---|---|---|---|
 | [`AES`](#aes) | Funguje jen v omezeném auditovaném workflow; NQ=1, bez f-shellů a s riziky v cache/TAU kapacitě. Numerický solver nebyl v auditu spuštěn. | **Ne** | Ano. | `kkrgen` → — |
 | [`AIPES`](#aipes) | Funguje v auditovaném fixed-geometry workflow; není to numerická integrace ARPES přes úhly. | **Ne** | Ano. | `kkrspec` → — |
@@ -397,7 +397,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Embedding (nativní SPR-KKR 9.7):** **Ano** — FREL embedding používá `CLUXCPLTENSOR`, který vytváří jak J, tak D soubory (`*_JJij.dat`, `*_Dij_[xyz].dat`), i když se požaduje jen DMI (`gen.f:967–1000`; `cluxcpltensor.f:278,432–440`). Není to standardní periodický `DMIVECTOR`.
 - **Executable (běžný / embedding):** `kkrgen` → `embgen`
 - **Vstupní soubory:** standardní vstup + `POTFIL`.
-- **Výstupní soubory:** `{DATASET_ADSI}_DMIVEC_Dij.dat`, volitelně grafy `{DATASET_ADSI}_DMIVEC_Dij_[xyz]_*.agr`.
+- **Výstupní soubory:** `{DATASET_ADSI}_DMIVEC_Dij.dat`, volitelně grafy `{DATASET_ADSI}_DMIVEC_Dij_[xyz]_*.agr`. **Embedding FREL:** `CLUXCPLTENSOR` zapisuje `{DATASET_ADSI}_JJij.dat` a `{DATASET_ADSI}_Dij_[xyz].dat` i při samostatném DMI, včetně odpovídajících AGR (`cluxcpltensor.f`).
 - **V SPR-KKR manuálu:** Ne jako samostatný task v dostupném manuálu; JXC je popsán.
 - **Parametry pokryté manuálem:** —
 - **Parametry nepokryté manuálem:** `TASK.DMI`, `TASK.JXC`, `TASK.CLURAD`, `TASK.NSHLCLU`, `TASK.SELECT`, `TASK.EXCLUDE`, `TASK.QREPONLY`
@@ -543,7 +543,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Embedding (nativní SPR-KKR 9.7):** **Ano** — Doloženou embeddingovou větví je FREL `CLUXCPLTENSOR` (`gen.f:967–1000`, `cluxcpltensor.f:63–69`), zapisující `*_JJij.dat` a `*_Dij_[xyz].dat`. SP-SREL `CLUXCPLJIJ` závisí na `IBZINT` a není zde považováno za ověřený embeddingový workflow.
 - **Executable (běžný / embedding):** `kkrgen` → `embgen`
 - **Vstupní soubory:** standardní vstup + `POTFIL`.
-- **Výstupní soubory:** Podle režimu `{DATASET_ADSI}_J_ij.dat` / `{DATASET_ADSI}_Jij_*.agr` nebo `{DATASET_ADSI}_XCPLTEN_Jij.dat` / `..._Jij_*.agr`; při aktivovaném DMI také DMI soubory.
+- **Výstupní soubory:** Periodicky: `{DATASET_ADSI}_J_ij.dat` / `{DATASET_ADSI}_Jij_*.agr` (SP-SREL), nebo `{DATASET_ADSI}_XCPLTEN_Jij.dat` a `XCPLTEN_*` ploty (FREL); periodické DMI má `DMIVEC_*`. **Embedding FREL:** `{DATASET_ADSI}_JJij.dat`, `{DATASET_ADSI}_Jij_*.agr`, `{DATASET_ADSI}_Dij_x.dat`, `_Dij_y.dat`, `_Dij_z.dat` a `Dij_[xyz]_*.agr` (`cluxcpltensor.f:278,432–440`).
 - **V SPR-KKR manuálu:** Ano.
 - **Parametry pokryté manuálem:** `TASK.CLURAD`
 - **Parametry nepokryté manuálem:** `TASK.JXC`, `TASK.DMI`, `TASK.NSHLCLU`, `TASK.SELECT`, `TASK.EXCLUDE`, `TASK.QREPONLY`
