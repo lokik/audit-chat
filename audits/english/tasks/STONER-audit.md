@@ -58,6 +58,8 @@ The normal executable is `kkrgen`, whereas embedded clusters require `embgen` (t
 
 ### Unresolved questions about the task's embedded behavior
 
+**Direct `SUSC_GAMMA` check (18 November 2026):** The available `PUB9.7_260420_18h13` Library source selection contains 478 files, ending alphabetically at `scfmad0d_back.f`; it does **not** include `susc_gamma.f`. Its complete source could not be retrieved from accessible materials. Therefore it has **not been verified** whether the internal `SUSC_GAMMA` type loops span `ITBOT:ITTOP` or `1:NT`. The available `gen.f:1592–1610`, `calcdos.f:246–253` and `cludrive.f:414–425` prove only that the passed `NEFTL` contains nonzero cluster DOS and zero host entries; passing the whole array is not proof that all entries contribute. **Required check:** inspect the full `susc_gamma.f` for type loops, `WAVFUN_READ_REL`, `NEFT` fallback and result accumulation, and establish whether any host types are processed. TAU selection is an independent input concern, not a task support criterion.
+
 - **Type indexing:** `calcdos.f:246–253` clears all `DOBS_LTX` but populates only `ITBOT:ITTOP` (cluster types). `gen.f:1601–1605` then copies `NEFTL` for **all** `IT=1..NT`. Whether `SUSC_GAMMA` correctly restricts its own processing to active cluster types and ignores host zeros has not been established in this recheck. The earlier source review also noted a small-DOS unit fallback (`susc_gamma.f:87–90`).
 - **Numerical validity:** There is no end-to-end native `embgen` run or comparison with host and cluster reference values. The periodic FREL, `NL>=3`, VWN-kernel and serial-mode limitations remain.
 
