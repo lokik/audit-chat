@@ -43,3 +43,23 @@ FULLPOT není pro STONER v check_input explicitně zakázán. Nevytvářím zák
 ## Ověření
 
 Aktuální regresní moduly: `test_stoner.py`. Jsou součástí společně ověřené sady vstupních parametrů a result_files (**1249 passed, 1 skipped**, 9. 11. 2026). Testy vstupu ověřují rozhraní a serializaci; necertifikují fyzikální hodnoty ani shodu serial/MPI. Samostatný numerický referenční výpočet tohoto tasku zde ověřen nebyl.
+
+## Podpora embeddingu — doplňující revize 18. 11. 2026
+
+**Klasifikace: Podmíněně; není to povolení spouštění v ASE2SPRKKR.**
+Běžný executable je `kkrgen`; pro embedded cluster se používá speciální `embgen` (nativní program `CLUGEN`), nikoli `kkrgen` s dodatečným parametrem.
+
+### Ověřená výpočetní cesta
+
+1. `initvar.f:384–390` rozpozná `STONER`, nastaví `RDTAUDIR=.TRUE.`, `ICORE=0` a `NOWRDOS=.TRUE.`. Jde o žádost o znovupoužití TAU, nikoli bezpodmínečné čtení cache.
+2. `kkrmain.f:932–959` zavolá `TAU_DIR_INQUIRE`. Pokud TAU cache **není dostupná**, přepne `RDTAUDIR=.FALSE.` a `RUNELOOP=.TRUE.`. To opravuje dřívější chybný předpoklad, že STONER vždy čte předpočtenou hostitelskou TAU.
+3. `cludrive.f:398–425,619–658` sestaví host+cluster systém, omezí aktivní typy na `NTHOST+1:NTHOST+NTCLU` a pro `CLUGEN` volá `GEN`. `gen.f:744–807` vytvoří jednocentrové vlnové funkce a při `RDTAUDIR=.FALSE.` volá `TAU_DRIVE` místo `TAU_DIR_READ`. Takto se může dostat k embeddingové výpočetní větvi, stejně jako `DOS`.
+4. `gen.f:869–875` volá `CALCDOS` a `gen.f:1592–1610` následně `SUSC_GAMMA`, tedy existuje dosažitelná nativní cesta k parametrům STONER.
+
+### Nevyřešené překážky k označení „Ano“
+
+- **Cache:** při nalezení `TAUDIR` zůstane `RDTAUDIR=.TRUE.` a `gen.f:788–790` čte uložené TAU. Použití staré hostitelské cache místo clusterového výsledku může výpočet znehodnotit. Nestačí ověřit pouhé jméno a počet energií; je nutné určit původ TAU a její kompatibilitu s hostitelem a clusterem. Bez správné cache je bezpečnější vynutit nový embedded výpočet, což však nynější task deklarace samostatně nezajišťuje.
+- **Indexy atomových typů:** `calcdos.f:246–253` vynuluje celé `DOBS_LTX` a naplní jen `ITBOT:ITTOP`, tj. cluster. `gen.f:1601–1605` přesto sestaví `NEFTL` pro **všech** `IT=1..NT`. Zda `SUSC_GAMMA` správně omezuje vlastní smyčky na `ITBOT:ITTOP` a nepoužívá nuly hostitele (případně je nenahrazuje umělými jednotkami), není v této revizi potvrzeno. Starší audit upozornil i na fallback `NEFTL=1` při malém DOS (`susc_gamma.f:87–90`).
+- **Numerika:** chybí nativní end-to-end test pro `embgen`, nezávislé srovnání s hostitelským a clusterovým referenčním výpočtem i ověření významu lokálního Stonerova parametru. Standardní omezení FREL, `NL>=3`, VWN kernelu a vypnutého MPI tím nezanikají.
+
+**Rozhodnutí pro ASE2SPRKKR:** `TaskDefinition.supports_embedded_cluster=False` ponechat; `embgen` pro STONER zatím nevybírat. Pozitivní změnu podmínit ověřením `SUSC_GAMMA`, politiky TAU cache a testem nativního výpočtu.
