@@ -32,6 +32,8 @@ This revision separately classifies **native embedding support in SPR-KKR 9.7** 
 
 ### Executable selection
 
+**Deep recheck, 18 November 2026:** Of the seven previously unverified tasks, `APS`, `COMPTON`, `POSANI`, `POSANIPREP` and `VBPES` are now **No** due to incompatible old-DOS handling, periodic k-space operators, or lack of an embedded final-state calculation. `POSANITAU` is **Conditional** because `posanipot.f` explicitly handles cluster sites, but the physical host+cluster normalization is not validated. `STONER` remains **Unverified**: its `SUSC_GAMMA` postprocessing lacks a demonstrated embedded data contract. Native embedded executables remain enabled in `ase2sprkkr` only for `SCF`, `DOS`, `JXC`, and `DMI`.
+
 Normal calculations use the executable specified by their task definition. True embedding requires the **special** `embscf` (`CLUSCF`) or `embgen` (`CLUGEN`) program, not generic `kkrscf`/`kkrgen`. `KKRSPEC` and `KKRCHI` have no equivalent operational embedding driver. For **Conditional**/**Unverified** tasks, `embgen?` indicates only a possible entry through `CLUGEN`, **not** an enabled task in `ase2sprkkr`. `BSF` is schema-only; the runnable aliases are `BSFEK`/`BSFKK`.
 
 **Recheck, 18 November:** `PLOTRHO`, `NRAES` and `T1` are now **No** because of native defects independent of embedding. Native FREL embedded JXC/DMI writes `*_JJij.dat` and `*_Dij_[xyz].dat`, **not** periodic `XCPLTEN_*`/`DMIVEC_*` outputs; `TAU.BZINT=POINTS` is required for host `TAUIJ` and must not be blindly changed to `CLUSTER`. Embedded SP-SREL JXC is not enabled pending further verification.
@@ -42,7 +44,7 @@ Normal calculations use the executable specified by their task definition. True 
 |---|---|---|---|---|
 | [`AES`](#aes) | Works only in the limited audited workflow; NQ=1, no f shells, with cache/TAU-capacity risks. The numerical solver was not run during the audit. | **No** | Yes. | `kkrgen` → — |
 | [`AIPES`](#aipes) | Works in the audited fixed-geometry workflow; it is not numerical integration of ARPES over angles. | **No** | Yes. | `kkrspec` → — |
-| [`APS`](#aps) | Works with a compatible old-format DOS; positive `GAMMA` broadening follows a problematic native branch. | **Unverified** | Yes. | `kkrgen` → `embgen?` |
+| [`APS`](#aps) | Works with a compatible old-format DOS; positive `GAMMA` broadening follows a problematic native branch. | **No** | Yes. | `kkrgen` → — |
 | [`ARPES`](#arpes) | The source-defined ARPES workflow is meaningful in the audited range. The current interface uses the correct presence-sensitive `TASK.CRYS_VECS`; advanced numerical branches are not certified. | **No** | Yes. | `kkrspec` → — |
 | [`BAND`](#band) | Works in the audited workflow; an eigen-solver failure can continue natively as far as `LOG(0)`. This is not `BSF` or `EKREL`. | **No** | Yes. | `kkrspec` → — |
 | [`BONDING`](#bonding) | Broken: normal `TAU_DRIVE` prepares `KTAUIJ=0`, while `CLUBONDING` reads scratch units requiring `KTAUIJ>=2`. | **No** | No. | `kkrgen` → — |
@@ -55,7 +57,7 @@ Normal calculations use the executable specified by their task definition. True 
 | [`CHIXAS`](#chixas) | Works only with physically consistent external `NEF/CHISPN/CHIVV`; no universally safe defaults exist. | **No** | No. | `kkrchi` → — |
 | [`CLPES`](#clpes) | Works in the audited serial fixed-geometry workflow; CPA and some polarization modes stop natively, and with `NE=1` the core-state index must be valid. | **No** | No. | `kkrspec` → — |
 | [`CLXPS`](#clxps) | Works in the audited ASA/FREL workflow; advanced angular geometries and numerical output were not independently certified. | **Conditional** | Yes. | `kkrgen` → `embgen?` |
-| [`COMPTON`](#compton) | Works with limitations; `EMD2D` double-scales nonzero `PNMAX`, and shifted even grids lose their endpoints. | **Unverified** | Yes. | `kkrgen` → `embgen?` |
+| [`COMPTON`](#compton) | Works with limitations; `EMD2D` double-scales nonzero `PNMAX`, and shifted even grids lose their endpoints. | **No** | Yes. | `kkrgen` → — |
 | [`DMI`](#dmi) | Works with significant caveats: the individual DMI components are not equivalent in the native source (especially Dz), and frame/multiplicity/radius must be checked. | **Yes** | No as a separate task in the available manual; JXC is documented. | `kkrgen` → `embgen` |
 | [`DOS`](#dos) | Works. | **Yes** | Yes. | `kkrgen` → `embgen` |
 | [`EKREL`](#ekrel) | Works; CPA is rejected natively, and BSF should be used for disorder. | **No** | Yes. | `kkrgen` → — |
@@ -78,9 +80,9 @@ Normal calculations use the executable specified by their task definition. True 
 | [`PLOTPRS`](#plotprs) | Works with limitations: magnetic spin/orbital curves can collide in the same dataset, and panel limits ignore the orbital contribution. | **Conditional** | No. | `kkrgen` → `embgen?` |
 | [`PLOTRHO`](#plotrho) | Broken: `RHORSQ` is allocated only in the potential branch, but the standalone rho writer needs it. | **No** | No. | `kkrgen` → — |
 | [`PLOTSFN`](#plotsfn) | Works for a genuine FULLPOT potential containing shape-function data. | **Conditional** | No. | `kkrgen` → `embgen?` |
-| [`POSANI`](#posani) | Works only with a compatible `POSANIPREP`; the native data path assumes `NQ=NT`, and general `NQ!=NT` is broken. | **Unverified** | Yes. | `kkrgen` → `embgen?` |
-| [`POSANIPREP`](#posaniprep) | Works for a simple 3D ASA/FREL `NQ=NT` case; TAUQQ export is broken for general `NQ!=NT`. The positron-band-bottom energy must be chosen by the user. | **Unverified** | Yes. | `kkrgen` → `embgen?` |
-| [`POSANITAU`](#posanitau) | Works in the audited 3D ASA/FREL workflow; integration-energy bounds need physical validation and the enhancement factor is fixed natively. | **Unverified** | No. | `kkrgen` → `embgen?` |
+| [`POSANI`](#posani) | Works only with a compatible `POSANIPREP`; the native data path assumes `NQ=NT`, and general `NQ!=NT` is broken. | **No** | Yes. | `kkrgen` → — |
+| [`POSANIPREP`](#posaniprep) | Works for a simple 3D ASA/FREL `NQ=NT` case; TAUQQ export is broken for general `NQ!=NT`. The positron-band-bottom energy must be chosen by the user. | **No** | Yes. | `kkrgen` → — |
+| [`POSANITAU`](#posanitau) | Works in the audited 3D ASA/FREL workflow; integration-energy bounds need physical validation and the enhancement factor is fixed natively. | **Conditional** | No. | `kkrgen` → `embgen?` |
 | [`PSHIFT`](#pshift) | Works, but resonance splitting is unreliable in some cases. | **Conditional** | Yes. | `kkrgen` → `embgen?` |
 | [`SCF`](#scf) | Works for `BROYDEN2`, `ANDERSON`, and `TCHEBY` within the allowed scope; `PULAY` is not a valid choice and `TCHEBY` is unavailable for FULLPOT. | **Yes** | Yes. | `kkrscf` → `embscf` |
 | [`SIGMA`](#sigma) | Works with limitations; the Fermi-sea contribution is not included automatically, and the modes use fixed file conventions/ImE. | **No** | Yes. | `kkrchi` → — |
@@ -91,7 +93,7 @@ Normal calculations use the executable specified by their task definition. True 
 | [`TDOBS`](#tdobs) | The declared purpose is not demonstrated: no separate time-dependent-observable implementation was found; as a generic DOS path it can run serially. | **No** | No. | `kkrgen` → — |
 | [`TORQUE`](#torque) | Works, but requires a rotated magnetic potential/geometry; a normal unrotated magnetic potential may stop natively, and mixed occupancy uses the first type. | **Conditional** | Yes. | `kkrgen` → `embgen?` |
 | [`TUTORIAL`](#tutorial) | Mixed: YLM/JLX/JLX-ASYMPT and DOS-FEG/DOS-SS/DOS-CLU/DOS-BULK/GEN are usable; CHR-POT, POT-DECOMP/POT-XC, RWF-L/RWF-E, and CORE-ALL have specific native bugs/limitations. | **No** | No. | `kkrgen` → — |
-| [`VBPES`](#vbpes) | Works with limitations; VBUPS does not automatically select a UV photon energy natively, and the calculation depends on a compatible TAU/final-state setup. | **Unverified** | Yes. | `kkrgen` → `embgen?` |
+| [`VBPES`](#vbpes) | Works with limitations; VBUPS does not automatically select a UV photon energy natively, and the calculation depends on a compatible TAU/final-state setup. | **No** | Yes. | `kkrgen` → — |
 | [`WFPLOT`](#wfplot) | Works in the ASA/FREL serial workflow; BAND uses only the first energy point and FULLPOT is unsupported. | **Conditional** | Yes. | `kkrgen` → `embgen?` |
 | [`XAS`](#xas) | Works with known caveats; the static branch is usable, but TAU compatibility and the effective start of the energy scan must be checked. Native MPI exits before XRAYSPEC. | **Conditional** | Yes. | `kkrgen` → `embgen?` |
 | [`XES`](#xes) | Not fully verified: RXES ends in the shared absorption-rate branch and output naming/interpretation is shared with XAS; the physical emission meaning was not confirmed. | **Conditional** | Yes. | `kkrgen` → `embgen?` |
@@ -139,8 +141,8 @@ Normal calculations use the executable specified by their task definition. True 
 
 - **What it does:** Calculates an appearance-potential spectrum by postprocessing a previously calculated DOS.
 - **Status:** Works with a compatible old-format DOS; positive `GAMMA` broadening follows a problematic native branch.
-- **Embedding (native SPR-KKR 9.7):** **Unverified** — `GEN` calls `NRAPS`, but no verified input DOS / cluster-site output contract exists for embedding (`gen.f:1414–1424`).
-- **Executable (normal / embedding):** `kkrgen` → `embgen?` (possible route only; disabled on `cluster` branch)
+- **Embedding (native SPR-KKR 9.7):** **No** — `initvar.f:281–287` expects a pre-existing old-format DOS and disables the energy loop, but embedded `CLUDRIVE` forces `RUNELOOP=.TRUE.` and reopens/writes `{DATSET}.dos` (`cludrive.f:631–655`), the very file consumed by `NRAPS` (`nraps.f:829–863`). The embedded driver breaks this input contract.
+- **Executable (normal / embedding):** `kkrgen` → no supported embedding executable
 - **Input files:** Generated input + `POTFIL` + existing `{DATASET_ADSI}.dos` (old spin-resolved DOS format and adequate energy capacity required).
 - **Output files:** `{DATASET_ADSI}.<type>.<core-shell>.aps`; with `GAMMA>0`, also `{DATASET_ADSI}.dos.brd`; optional CALCLS/OUTGNU auxiliaries.
 - **In the SPR-KKR manual:** Yes.
@@ -376,8 +378,8 @@ Normal calculations use the executable specified by their task definition. True 
 
 - **What it does:** Calculates electron Compton momentum density and profiles.
 - **Status:** Works with limitations; `EMD2D` double-scales nonzero `PNMAX`, and shifted even grids lose their endpoints.
-- **Embedding (native SPR-KKR 9.7):** **Unverified** — A generic `COMPTON` call exists in `GEN`, but no dedicated, verified spectral output on embedded cluster TAU was found (`gen.f:1555–1567`).
-- **Executable (normal / embedding):** `kkrgen` → `embgen?` (possible route only; disabled on `cluster` branch)
+- **Embedding (native SPR-KKR 9.7):** **No** — The momentum-resolved code constructs its own periodic k-space matrix using `STRSET`/`SETKKR` and inverts it (`compton.f:917–935`), instead of using the embedded cluster scattering-path operator; it also reads an external TAU directory (`compton.f:633–654`). No embedded equivalent of this calculation is implemented.
+- **Executable (normal / embedding):** `kkrgen` → no supported embedding executable
 - **Input files:** Generated input + `POTFIL` + required compatible electronic TAU directory (`TAUDIR`/`TAUPATH`).
 - **Output files:** `{DATASET_ADSI}_BND.mcp`, `{DATASET_ADSI}_COR.mcp`, `{DATASET_ADSI}_TOT.mcp`.
 - **In the SPR-KKR manual:** Yes.
@@ -795,8 +797,8 @@ Normal calculations use the executable specified by their task definition. True 
 
 - **What it does:** Calculates positron-annihilation momentum density and profiles.
 - **Status:** Works only with a compatible `POSANIPREP`; the native data path assumes `NQ=NT`, and general `NQ!=NT` is broken.
-- **Embedding (native SPR-KKR 9.7):** **Unverified** — `GEN` calls COMPTON/POSANI but there is no independently validated embedded positron workflow or input compatibility (`gen.f:1555–1567`).
-- **Executable (normal / embedding):** `kkrgen` → `embgen?` (possible route only; disabled on `cluster` branch)
+- **Embedding (native SPR-KKR 9.7):** **No** — Shares the periodic momentum-space `COMPTON` driver (`gen.f:1572–1577`, `compton.f:917–935`) and requires periodic positron pair data `{DATSET}_pos_dat.pan` (`compton.f:424–426`). Calling this from `CLUGEN` does not replace periodic final-state integration with embedded scattering.
+- **Executable (normal / embedding):** `kkrgen` → no supported embedding executable
 - **Input files:** Generated input + electron `POTFIL` + required electron TAU directory + `{DATASET_ADSI}_pos_dat.pan` from POSANIPREP.
 - **Output files:** `{DATASET_ADSI}_BND.mpa`, `_COR.mpa`, `_TOT.mpa`; depending on options also `..._pan2d.dat` or `..._data.mpa`.
 - **In the SPR-KKR manual:** Yes.
@@ -813,8 +815,8 @@ Normal calculations use the executable specified by their task definition. True 
 
 - **What it does:** Prepares the s-like positron state, wave functions, and scattering data for `POSANI`.
 - **Status:** Works for a simple 3D ASA/FREL `NQ=NT` case; TAUQQ export is broken for general `NQ!=NT`. The positron-band-bottom energy must be chosen by the user.
-- **Embedding (native SPR-KKR 9.7):** **Unverified** — `GEN` calls `POSANIPREPARE` (`gen.f:1546–1554`), without an evidenced host+cluster positron-state contract.
-- **Executable (normal / embedding):** `kkrgen` → `embgen?` (possible route only; disabled on `cluster` branch)
+- **Embedding (native SPR-KKR 9.7):** **No** — `POSANIPREPARE` explicitly creates a periodic k-mesh and calls `KLOOPSIJ` for `TAUQQ` (`posaniprep.f:116–145`), not embedded-cluster `TAUIJ`. Its output also loops over `NT` types instead of `NQ` sites (`posaniprep.f:268–272`), which breaks general host+cluster mapping.
+- **Executable (normal / embedding):** `kkrgen` → no supported embedding executable
 - **Input files:** standard input + electronic `POTFIL`.
 - **Output files:** `{DATASET_ADSI}_pos_dat.pan`.
 - **In the SPR-KKR manual:** Yes.
@@ -831,7 +833,7 @@ Normal calculations use the executable specified by their task definition. True 
 
 - **What it does:** Integrates positron density and calculates the annihilation rate/lifetime.
 - **Status:** Works in the audited 3D ASA/FREL workflow; integration-energy bounds need physical validation and the enhancement factor is fixed natively.
-- **Embedding (native SPR-KKR 9.7):** **Unverified** — A positron TAU/density branch exists in `GEN`, but embedded TAUIJ use and site mapping are not verified (`gen.f:1509–1544`).
+- **Embedding (native SPR-KKR 9.7):** **Conditional** — There is an actual cluster-aware native path: `POSANIPOT` handles `NTCLU` and shifts cluster-atom potentials (`posanipot.f:95–110,267–275`), while `GEN` computes cluster TAU before `CHRDNS` and `POSANILAMBDA` (`gen.f:783–807,882–897,1509–1564`). `POSANILAMBDA` integrates over active types `ITBOT:ITTOP` (`posanilambda.f:59–105`); physical normalization across host+cluster is unverified. Conditional native path only, disabled in `ase2sprkkr`.
 - **Executable (normal / embedding):** `kkrgen` → `embgen?` (possible route only; disabled on `cluster` branch)
 - **Input files:** Generated input + electron `POTFIL`; optional existing `{DATASET_ADSI}_positron.rho` cache.
 - **Output files:** Native annihilation rate/lifetime in run output; optional `{DATASET_ADSI}_positron.rho` cache.
@@ -1029,8 +1031,8 @@ Normal calculations use the executable specified by their task definition. True 
 
 - **What it does:** Calculates angle-integrated valence photoemission in KKRGEN, separately from KKRSPEC ARPES.
 - **Status:** Works with limitations; VBUPS does not automatically select a UV photon energy natively, and the calculation depends on a compatible TAU/final-state setup.
-- **Embedding (native SPR-KKR 9.7):** **Unverified** — A generic `VBPES` call exists (`gen.f:1450–1455`), but embedded local-cluster final/surface-state geometry is unverified.
-- **Executable (normal / embedding):** `kkrgen` → `embgen?` (possible route only; disabled on `cluster` branch)
+- **Embedding (native SPR-KKR 9.7):** **No** — The photoemission workflow reads an existing electron TAU directory and constructs periodic final states (`initvar.f:221–255`, `gen.f:1445–1450`, per-task source audit of `vbpes.f:282–291`). No embedded final-state construction or mapping of photoemission matrix elements to the cluster is established; `CLUGEN` does not implement this variant.
+- **Executable (normal / embedding):** `kkrgen` → no supported embedding executable
 - **Input files:** Generated input + `POTFIL` + required initial-state TAU; optional final-state `{DATASET_ADSI}.tau.dir.F_<photon>` cache.
 - **Output files:** Fixed `arpes.dat`, `arpes_spol.dat`, `spin.matrix.xps`; optional final-state `{DATASET_ADSI}.dos.F_<photon>`.
 - **In the SPR-KKR manual:** Yes.
