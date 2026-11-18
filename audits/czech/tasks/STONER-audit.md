@@ -44,23 +44,25 @@ FULLPOT není pro STONER v check_input explicitně zakázán. Nevytvářím zák
 
 Aktuální regresní moduly: `test_stoner.py`. Jsou součástí společně ověřené sady vstupních parametrů a result_files (**1249 passed, 1 skipped**, 9. 11. 2026). Testy vstupu ověřují rozhraní a serializaci; necertifikují fyzikální hodnoty ani shodu serial/MPI. Samostatný numerický referenční výpočet tohoto tasku zde ověřen nebyl.
 
-## Podpora embeddingu — doplňující revize 18. 11. 2026
+## Podpora embeddingu — přímá kontrola 18. 11. 2026
 
-**Klasifikace: Podmíněně; není to povolení spouštění v ASE2SPRKKR.**
-Běžný executable je `kkrgen`; pro embedded cluster se používá speciální `embgen` (nativní program `CLUGEN`), nikoli `kkrgen` s dodatečným parametrem.
+**Klasifikace: Ne (současný nativní kód není funkční pro embedded cluster).** Normálním executable je `kkrgen`; jeho clusterovým protějškem by byl `embgen` (`CLUGEN`), ale pro STONER zatím nesmí být automaticky vybrán. Zdroj `susc.f` je obecná susceptibilita, kdežto `GEN` pro task `STONER` **přímo** volá samostatnou rutinu `SUSC_GAMMA` implementovanou v `susc_gamma.f` (`gen.f:1592–1610`). Oba soubory byly nyní dostupné a analyzované.
 
-### Ověřená výpočetní cesta
+### Ověřená příčina selhání
 
-1. `initvar.f:384–390` rozpozná `STONER`, nastaví `RDTAUDIR=.TRUE.`, `ICORE=0` a `NOWRDOS=.TRUE.`. Jde o žádost o znovupoužití TAU, nikoli bezpodmínečné čtení cache.
-2. `kkrmain.f:932–959` zavolá `TAU_DIR_INQUIRE`. Pokud TAU cache **není dostupná**, přepne `RDTAUDIR=.FALSE.` a `RUNELOOP=.TRUE.`. To opravuje dřívější chybný předpoklad, že STONER vždy čte předpočtenou hostitelskou TAU.
-3. `cludrive.f:398–425,619–658` sestaví host+cluster systém, omezí aktivní typy na `NTHOST+1:NTHOST+NTCLU` a pro `CLUGEN` volá `GEN`. `gen.f:744–807` vytvoří jednocentrové vlnové funkce a při `RDTAUDIR=.FALSE.` volá `TAU_DRIVE` místo `TAU_DIR_READ`. Takto se může dostat k embeddingové výpočetní větvi, stejně jako `DOS`.
-4. `gen.f:869–875` volá `CALCDOS` a `gen.f:1592–1610` následně `SUSC_GAMMA`, tedy existuje dosažitelná nativní cesta k parametrům STONER.
+1. `CLUDRIVE` nastaví `ITBOT=NTHOST+1`, `ITTOP=NTHOST+NTCLU`, ale globální `NT=NTHOST+NTCLU` (`cludrive.f:414–425`). Aktivní typy pro samotný cluster tedy **nejsou** `1:NT`.
+2. Před clusterovým `GEN` uzavře existující `IFILCBWF` a otevře nový prázdný direct-access `SCRATCH` soubor (`cludrive.f:597–604`). Tím se případné hostitelské vlnové funkce z dřívější fáze **nezachovají**.
+3. `GEN` spustí `RUNSSITE` (`gen.f:744–746`); v běžné embedded větvi `SSITE` počítá/zapisuje vlnové funkce pouze pro `IT=ITBOT:ITTOP` (`ssite.f:143,613–625`, obdobně `fpssite.f:246,823–831`).
+4. `CALCDOS` vynuluje celé `DOBS_LTX` a naplní pouze `ITBOT:ITTOP` (`calcdos.f:246–253`). Přesto `GEN` předá `NEFTL` sestavené pro `IT=1:NT` (`gen.f:1601–1610`).
+5. **Rozhodující chyba:** `SUSC_GAMMA` iteruje `DO IT=1,NT` (`susc_gamma.f:77`), tedy nejprve hostitelským typem. Jeho prázdné DOS nahradí umělými hodnotami `NEFTL(IT,1:NL)=1`, `NEFT(IT)=NL` (`susc_gamma.f:82–91`). Následně **bez podmínky** volá `WAVFUN_READ_REL(IFILCBWF,IT,...)` (`susc_gamma.f:104–105`). Tato rutina čte direct-access záznam s číslem odvozeným od `IT` (`wavfun_read.f:158–169`) a na chybějící záznam reaguje `STOP_MESSAGE` (`wavfun_read.f:200–201`). Hostitelské vlnové funkce do nového souboru nebyly zapsány.
+6. Výstup na konci `SUSC_GAMMA` navíc prochází opět `IT=1:NT` (`susc_gamma.f:298–301`), takže by zahrnoval i umělé hostitelské Stonerovy parametry.
 
-### Nevyřešené otázky vlastní podpory embeddingu
+Nejde o hypotetické riziko špatného TAU: **chybné rozsahy smyček jsou přímo doložené ve zdrojovém kódu**. Z analýzy vyplývá, že standardní embedded průchod narazí na čtení nezapsaných hostitelských vlnových funkcí; samostatný numerický běh nativního executable nebyl proveden.
 
-**Přímá kontrola `SUSC_GAMMA` (18. 11. 2026):** Zpřístupněná sada zdrojů `PUB9.7_260420_18h13` v knihovně obsahuje 478 souborů a končí abecedně na `scfmad0d_back.f`; `susc_gamma.f` v ní není. V otevřených podkladech nebylo možné získat její kompletní zdroj. Proto **nelze tvrdit, že bylo ověřeno**, zda vlastní smyčky `SUSC_GAMMA` běží přes `ITBOT:ITTOP`, nebo přes `1:NT`. Z doložených `gen.f:1592–1610`, `calcdos.f:246–253` a `cludrive.f:414–425` lze potvrdit pouze: `NEFTL` má hodnoty DOS clusteru a nulové hodnoty hostitele a celé pole se předá rutině `SUSC_GAMMA`. Samotné předání všech prvků není důkazem jejich použití. **Vhodné ověření**: získat kompletní `susc_gamma.f`, projít všechny vnější smyčky přes typy, `WAVFUN_READ_REL`, výpočet `NEFT` a DOS fallback a zjistit, zda se hostitelské typy dostávají do akumulovaných výsledků. Výběr TAU je samostatný problém a v tomto hodnocení nepředstavuje omezení.
+### Minimální nativní oprava
 
-- **Indexy atomových typů:** `calcdos.f:246–253` vynuluje celé `DOBS_LTX` a naplní jen `ITBOT:ITTOP`, tj. cluster. `gen.f:1601–1605` přesto sestaví `NEFTL` pro **všech** `IT=1..NT`. Zda `SUSC_GAMMA` správně omezuje vlastní smyčky na `ITBOT:ITTOP` a nepoužívá nuly hostitele (případně je nenahrazuje umělými jednotkami), není v této revizi potvrzeno. Starší audit upozornil i na fallback `NEFTL=1` při malém DOS (`susc_gamma.f:87–90`).
-- **Numerika:** chybí nativní end-to-end test pro `embgen`, nezávislé srovnání s hostitelským a clusterovým referenčním výpočtem i ověření významu lokálního Stonerova parametru. Standardní omezení FREL, `NL>=3`, VWN kernelu a vypnutého MPI tím nezanikají.
+- V `susc_gamma.f` importovat `ITBOT,ITTOP` z `MOD_TYPES` a změnit hlavní `DO IT=1,NT` na `DO IT=ITBOT,ITTOP`.
+- Omezit na stejný interval výpis sumarizace na konci rutiny (aktuálně `IT=1,NT`, ř. 301); zároveň předávat/produkovat jen smysluplné hodnoty clusteru.
+- Projít, zda další diagnostiky, pomocné `SUSC_VWN` a `SUSC_ORBPOL` nepotřebují úpravy. Následně spustit reálný embedded test a porovnat parametry Stonera na clusterových atomech.
 
-**Rozhodnutí pro ASE2SPRKKR:** `TaskDefinition.supports_embedded_cluster=False` ponechat; `embgen` pro STONER zatím nevybírat. Pozitivní změnu podmínit ověřením smyček a datového kontraktu `SUSC_GAMMA` pro cluster a nativním výpočetním testem. **Předpokládáme správné vstupní TAU; jeho výběr, původ a případné znovupoužití sem nepatří.**
+**ASE2SPRKKR:** `supports_embedded_cluster=False` zůstává správně. Změna nativního programu je podmínkou pro povolení `embgen` při STONER. Výběr, původ a reuse TAU je nezávislá problematika a není součástí této klasifikace.
