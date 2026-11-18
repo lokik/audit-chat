@@ -44,23 +44,25 @@ FULLPOT is not explicitly prohibited for STONER in check_input. I do not create 
 
 Current regression modules: `test_stoner.py`. They are included in the integrated input-parameter and result_files suite (**1249 passed, 1 skipped**, 2026-11-09). Input tests check the interface and serialization; they do not certify physical results or serial/MPI agreement. No independent numerical reference calculation of this task was verified here.
 
-## Native embedding support — follow-up review, 18 November 2026
+## Native embedding support — direct recheck, 18 November 2026
 
-**Classification: Conditional; this does not enable the task in ASE2SPRKKR.**
-The normal executable is `kkrgen`, whereas embedded clusters require `embgen` (the native `CLUGEN` program), not the generic executable with an additional option.
+**Classification: No (the current native implementation is broken for an embedded cluster).** The normal executable is `kkrgen` and its embedded equivalent is `embgen` (`CLUGEN`), but the latter must not be enabled for STONER. The generic susceptibility routine is `SUSC` in `susc.f`; for the `STONER` task `GEN` calls the distinct `SUSC_GAMMA` in `susc_gamma.f` **directly** (`gen.f:1592–1610`). Both source files have now been retrieved and inspected.
 
-### Reachable native data path
+### Confirmed native failure path
 
-1. `initvar.f:384–390` selects STONER and requests TAU cache reuse with `RDTAUDIR=.TRUE.`, `ICORE=0`, `NOWRDOS=.TRUE.`. That is a request to reuse cache, **not** proof of unconditional cache reading.
-2. `kkrmain.f:932–959` checks `TAU_DIR_INQUIRE`. If the cache is **unavailable**, it sets `RDTAUDIR=.FALSE.` and `RUNELOOP=.TRUE.`. This corrects the earlier misconception that STONER can only load host TAU.
-3. `cludrive.f:398–425,619–658` constructs the host+cluster system, restricts active types to `NTHOST+1:NTHOST+NTCLU`, and calls `GEN` from `CLUGEN`. `gen.f:744–807` generates site radial wave functions and, with `RDTAUDIR=.FALSE.`, calls `TAU_DRIVE` rather than `TAU_DIR_READ`, making the embedded scattering route reachable as with DOS.
-4. `gen.f:869–875` computes local DOS via `CALCDOS`, and `gen.f:1592–1610` calls `SUSC_GAMMA`. Thus the native STONER routine is reachable with potentially embedded inputs.
+1. `CLUDRIVE` sets `ITBOT=NTHOST+1`, `ITTOP=NTHOST+NTCLU`, with global `NT=NTHOST+NTCLU` (`cludrive.f:414–425`). Cluster-active types are **not** `1:NT`.
+2. Immediately before cluster `GEN`, `CLUDRIVE` closes the old `IFILCBWF` and opens a **fresh empty direct-access scratch** wave-function file (`cludrive.f:597–604`). Host wave functions from a previous phase are no longer present in this file.
+3. `GEN` runs `RUNSSITE` (`gen.f:744–746`); for the ordinary embedded path `SSITE` solves/writes wave functions only for `IT=ITBOT:ITTOP` (`ssite.f:143,613–625`, analogous `fpssite.f:246,823–831`).
+4. `CALCDOS` clears all `DOBS_LTX` and populates only `ITBOT:ITTOP` (`calcdos.f:246–253`), while `GEN` assembles the `NEFTL` input array for all `IT=1:NT` (`gen.f:1601–1610`).
+5. **Fatal mismatch:** `SUSC_GAMMA` unconditionally loops over `IT=1,NT` (`susc_gamma.f:77`), including host types first. For host DOS zeroes it fabricates `NEFTL(IT,1:NL)=1` and `NEFT(IT)=NL` (`susc_gamma.f:82–91`). It then **unconditionally** reads `WAVFUN_READ_REL(IFILCBWF,IT,...)` (`susc_gamma.f:104–105`). That reader fetches type-indexed direct-access records (`wavfun_read.f:158–169`) and raises `STOP_MESSAGE` for an absent record (`wavfun_read.f:200–201`). Host records were not written to this newly opened file.
+6. Final output again iterates over `IT=1,NT` (`susc_gamma.f:298–301`), which would also include fictitious host Stoner values.
 
-### Unresolved questions about the task's embedded behavior
+This is **a source-proven loop/data mismatch**, not an uncertainty about TAU choice. The ordinary embedded path reaches an unwritten host wave-function record. No native numerical executable was run in this audit.
 
-**Direct `SUSC_GAMMA` check (18 November 2026):** The available `PUB9.7_260420_18h13` Library source selection contains 478 files, ending alphabetically at `scfmad0d_back.f`; it does **not** include `susc_gamma.f`. Its complete source could not be retrieved from accessible materials. Therefore it has **not been verified** whether the internal `SUSC_GAMMA` type loops span `ITBOT:ITTOP` or `1:NT`. The available `gen.f:1592–1610`, `calcdos.f:246–253` and `cludrive.f:414–425` prove only that the passed `NEFTL` contains nonzero cluster DOS and zero host entries; passing the whole array is not proof that all entries contribute. **Required check:** inspect the full `susc_gamma.f` for type loops, `WAVFUN_READ_REL`, `NEFT` fallback and result accumulation, and establish whether any host types are processed. TAU selection is an independent input concern, not a task support criterion.
+### Minimal native repair
 
-- **Type indexing:** `calcdos.f:246–253` clears all `DOBS_LTX` but populates only `ITBOT:ITTOP` (cluster types). `gen.f:1601–1605` then copies `NEFTL` for **all** `IT=1..NT`. Whether `SUSC_GAMMA` correctly restricts its own processing to active cluster types and ignores host zeros has not been established in this recheck. The earlier source review also noted a small-DOS unit fallback (`susc_gamma.f:87–90`).
-- **Numerical validity:** There is no end-to-end native `embgen` run or comparison with host and cluster reference values. The periodic FREL, `NL>=3`, VWN-kernel and serial-mode limitations remain.
+- Import `ITBOT,ITTOP` from `MOD_TYPES` inside `susc_gamma.f` and iterate `IT=ITBOT,ITTOP` instead of `IT=1,NT`.
+- Restrict the final output implied-DO list to those same active cluster types and avoid returning fabricated host-type Stoner values.
+- Review helper routine behavior (`SUSC_VWN`, `SUSC_ORBPOL`) and run a true embedded integration calculation to validate cluster-site Stoner values.
 
-**ASE2SPRKKR policy:** Retain `TaskDefinition.supports_embedded_cluster=False` and do **not** select `embgen` for STONER until `SUSC_GAMMA` active-type loops and data contract are verified and a native embedded task integration test is performed. **Correct input TAU is assumed; its provenance, selection and reuse are outside this task-support assessment.**
+**ASE2SPRKKR:** Keep `supports_embedded_cluster=False`; native changes are necessary before STONER can select `embgen`. Correct TAU selection/provenance/reuse is a separate input management issue and does not influence this classification.
