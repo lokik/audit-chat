@@ -264,61 +264,61 @@ Následují aktuální dílčí audity. Uvedené moduly existují v `src/ase2spr
 
 | Rodina | Podrobný audit | Aktuální regresní moduly |
 |---|---|---|
-| AES | [AES](AES-audit.md) | `test_aes.py` |
-| AIPES | [AIPES](AIPES-audit.md) | `test_aipes.py` |
-| APS | [APS](APS-audit.md) | `test_aps.py` |
-| ARPES | [ARPES](ARPES-audit.md) | `test_arpes_audit.py`, `test_arpes_energy.py` |
-| BAND | [BAND](BAND-audit.md) | `test_band.py` |
-| BIS | [BIS](BIS-audit.md) | zdrojový rozbor |
-| BONDING | [BONDING](BONDING-audit.md) | `test_bonding.py` |
-| BSDOSIJ | [BSDOSIJ](BSDOSIJ-audit.md) | `test_bsdosij.py` |
-| BSF | [BSF](BSF-audit.md) | `test_bsf_audit.py`, `test_bsf_file_manifests.py` |
-| CHI | [CHI](CHI-audit.md) | `test_chi.py` |
-| CHILANDAU | [CHILANDAU](CHILANDAU-audit.md) | `test_chilandau.py` |
-| CHIXAS | [CHIXAS](CHIXAS-audit.md) | `test_chixas.py` |
-| CLPES | [CLPES](CLPES-audit.md) | `test_clpes.py` |
-| CLXPS | [CLXPS](CLXPS-audit.md) | `test_clxps.py` |
-| COMPTON | [COMPTON](COMPTON-audit.md) | `test_compton.py` |
-| DMI | [DMI](DMI-audit.md) | `test_dmi.py`, `test_exchange_file_manifests.py` |
-| DOS | [DOS](DOS-audit.md) | `test_dos.py` |
-| EKREL | [EKREL](EKREL-audit.md) | `test_ekrel.py` |
-| FMAG | [FMAG](FMAG-audit.md) | `test_fmag.py` |
-| FSCAT | [FSCAT](FSCAT-audit.md) | `test_fscat.py` |
-| GILBERT | [GILBERT](GILBERT-audit.md) | `test_gilbert.py` |
-| JALF | [JALF](JALF-audit.md) | `test_jalf.py` |
-| JORB | [JORB](JORB-audit.md) | `test_jorb.py` |
-| JXC | [JXC](JXC-audit.md) | `test_jxc.py`, `test_jxc_definition.py`, `test_exchange_file_manifests.py` |
-| MECHECK | [MECHECK](MECHECK-audit.md) | `test_mecheck.py` |
-| MEPLOT | [MEPLOT](MEPLOT-audit.md) | `test_meplot.py` |
-| NRAES | [NRAES](NRAES-audit.md) | `test_nraes.py` |
-| NUCSSCPL | [NUCSSCPL](NUCSSCPL-audit.md) | `test_scattering_file_manifests.py`, `test_dataset_filenames.py` |
-| OPTABS | [OPTABS](OPTABS-audit.md) | `test_optabs.py` |
-| PHAGEN | [PHAGEN](PHAGEN-audit.md) | `test_phagen.py` |
-| PLOT-selectors | [PLOT-selectors](PLOT-selectors-audit.md) | `test_plotprs.py`, `test_plot_selector_file_manifests.py` |
-| PLOT2D-selectors | [PLOT2D-selectors](PLOT2D-selectors-audit.md) | `test_plot2dpr.py`, `test_plot_selector_file_manifests.py` |
-| PLOT2DPR | [PLOT2DPR](PLOT2DPR-audit.md) | `test_plot2dpr.py` |
-| PLOTJALF-PLOTJORB | [PLOTJALF-PLOTJORB](PLOTJALF-PLOTJORB-audit.md) | zdrojový rozbor |
-| PLOTPRS | [PLOTPRS](PLOTPRS-audit.md) | `test_plotprs.py` |
-| POSANI | [POSANI](POSANI-audit.md) | `test_posani.py` |
-| POSANIPREP | [POSANIPREP](POSANIPREP-audit.md) | `test_posaniprep.py` |
-| POSANITAU | [POSANITAU](POSANITAU-audit.md) | `test_posanitau.py` |
-| PSHIFT | [PSHIFT](PSHIFT-audit.md) | `test_pshift.py` |
-| SCF | [SCF](SCF-audit.md) | `test_scf_audit.py` |
-| SIGMA-XAS | [SIGMA-XAS](SIGMA-XAS-audit.md) | zdrojový rozbor |
-| SIGMA | [SIGMA](SIGMA-audit.md) | `test_sigma.py` |
-| SOCPAR | [SOCPAR](SOCPAR-audit.md) | `test_socpar.py` |
-| SPLEED | [SPLEED](SPLEED-audit.md) | `test_spleed.py` |
-| STONER | [STONER](STONER-audit.md) | `test_stoner.py` |
-| T1 | [T1](T1-audit.md) | `test_t1.py` |
-| TDOBS | [TDOBS](TDOBS-audit.md) | `test_tdobs.py` |
-| TORQUE | [TORQUE](TORQUE-audit.md) | `test_torque.py` |
-| TUTORIAL | [TUTORIAL](TUTORIAL-audit.md) | `test_tutorial.py` |
-| VBPES | [VBPES](VBPES-audit.md) | `test_vbpes.py` |
-| VBUPS-VBXPS | [VBUPS-VBXPS](VBUPS-VBXPS-audit.md) | `test_vbpes.py` |
-| WFPLOT | [WFPLOT](WFPLOT-audit.md) | `test_wfplot.py` |
-| XAS | [XAS](XAS-audit.md) | `test_xas.py`, `test_xas_definition.py` |
-| XES | [XES](XES-audit.md) | `test_xes.py` |
-| XRS | [XRS](XRS-audit.md) | `test_xrs.py` |
+| AES | [AES](tasks/AES-audit.md) | `test_aes.py` |
+| AIPES | [AIPES](tasks/AIPES-audit.md) | `test_aipes.py` |
+| APS | [APS](tasks/APS-audit.md) | `test_aps.py` |
+| ARPES | [ARPES](tasks/ARPES-audit.md) | `test_arpes_audit.py`, `test_arpes_energy.py` |
+| BAND | [BAND](tasks/BAND-audit.md) | `test_band.py` |
+| BIS | [BIS](tasks/BIS-audit.md) | zdrojový rozbor |
+| BONDING | [BONDING](tasks/BONDING-audit.md) | `test_bonding.py` |
+| BSDOSIJ | [BSDOSIJ](tasks/BSDOSIJ-audit.md) | `test_bsdosij.py` |
+| BSF | [BSF](tasks/BSF-audit.md) | `test_bsf_audit.py`, `test_bsf_file_manifests.py` |
+| CHI | [CHI](tasks/CHI-audit.md) | `test_chi.py` |
+| CHILANDAU | [CHILANDAU](tasks/CHILANDAU-audit.md) | `test_chilandau.py` |
+| CHIXAS | [CHIXAS](tasks/CHIXAS-audit.md) | `test_chixas.py` |
+| CLPES | [CLPES](tasks/CLPES-audit.md) | `test_clpes.py` |
+| CLXPS | [CLXPS](tasks/CLXPS-audit.md) | `test_clxps.py` |
+| COMPTON | [COMPTON](tasks/COMPTON-audit.md) | `test_compton.py` |
+| DMI | [DMI](tasks/DMI-audit.md) | `test_dmi.py`, `test_exchange_file_manifests.py` |
+| DOS | [DOS](tasks/DOS-audit.md) | `test_dos.py` |
+| EKREL | [EKREL](tasks/EKREL-audit.md) | `test_ekrel.py` |
+| FMAG | [FMAG](tasks/FMAG-audit.md) | `test_fmag.py` |
+| FSCAT | [FSCAT](tasks/FSCAT-audit.md) | `test_fscat.py` |
+| GILBERT | [GILBERT](tasks/GILBERT-audit.md) | `test_gilbert.py` |
+| JALF | [JALF](tasks/JALF-audit.md) | `test_jalf.py` |
+| JORB | [JORB](tasks/JORB-audit.md) | `test_jorb.py` |
+| JXC | [JXC](tasks/JXC-audit.md) | `test_jxc.py`, `test_jxc_definition.py`, `test_exchange_file_manifests.py` |
+| MECHECK | [MECHECK](tasks/MECHECK-audit.md) | `test_mecheck.py` |
+| MEPLOT | [MEPLOT](tasks/MEPLOT-audit.md) | `test_meplot.py` |
+| NRAES | [NRAES](tasks/NRAES-audit.md) | `test_nraes.py` |
+| NUCSSCPL | [NUCSSCPL](tasks/NUCSSCPL-audit.md) | `test_scattering_file_manifests.py`, `test_dataset_filenames.py` |
+| OPTABS | [OPTABS](tasks/OPTABS-audit.md) | `test_optabs.py` |
+| PHAGEN | [PHAGEN](tasks/PHAGEN-audit.md) | `test_phagen.py` |
+| PLOT-selectors | [PLOT-selectors](tasks/PLOT-selectors-audit.md) | `test_plotprs.py`, `test_plot_selector_file_manifests.py` |
+| PLOT2D-selectors | [PLOT2D-selectors](tasks/PLOT2D-selectors-audit.md) | `test_plot2dpr.py`, `test_plot_selector_file_manifests.py` |
+| PLOT2DPR | [PLOT2DPR](tasks/PLOT2DPR-audit.md) | `test_plot2dpr.py` |
+| PLOTJALF-PLOTJORB | [PLOTJALF-PLOTJORB](tasks/PLOTJALF-PLOTJORB-audit.md) | zdrojový rozbor |
+| PLOTPRS | [PLOTPRS](tasks/PLOTPRS-audit.md) | `test_plotprs.py` |
+| POSANI | [POSANI](tasks/POSANI-audit.md) | `test_posani.py` |
+| POSANIPREP | [POSANIPREP](tasks/POSANIPREP-audit.md) | `test_posaniprep.py` |
+| POSANITAU | [POSANITAU](tasks/POSANITAU-audit.md) | `test_posanitau.py` |
+| PSHIFT | [PSHIFT](tasks/PSHIFT-audit.md) | `test_pshift.py` |
+| SCF | [SCF](tasks/SCF-audit.md) | `test_scf_audit.py` |
+| SIGMA-XAS | [SIGMA-XAS](tasks/SIGMA-XAS-audit.md) | zdrojový rozbor |
+| SIGMA | [SIGMA](tasks/SIGMA-audit.md) | `test_sigma.py` |
+| SOCPAR | [SOCPAR](tasks/SOCPAR-audit.md) | `test_socpar.py` |
+| SPLEED | [SPLEED](tasks/SPLEED-audit.md) | `test_spleed.py` |
+| STONER | [STONER](tasks/STONER-audit.md) | `test_stoner.py` |
+| T1 | [T1](tasks/T1-audit.md) | `test_t1.py` |
+| TDOBS | [TDOBS](tasks/TDOBS-audit.md) | `test_tdobs.py` |
+| TORQUE | [TORQUE](tasks/TORQUE-audit.md) | `test_torque.py` |
+| TUTORIAL | [TUTORIAL](tasks/TUTORIAL-audit.md) | `test_tutorial.py` |
+| VBPES | [VBPES](tasks/VBPES-audit.md) | `test_vbpes.py` |
+| VBUPS-VBXPS | [VBUPS-VBXPS](tasks/VBUPS-VBXPS-audit.md) | `test_vbpes.py` |
+| WFPLOT | [WFPLOT](tasks/WFPLOT-audit.md) | `test_wfplot.py` |
+| XAS | [XAS](tasks/XAS-audit.md) | `test_xas.py`, `test_xas_definition.py` |
+| XES | [XES](tasks/XES-audit.md) | `test_xes.py` |
+| XRS | [XRS](tasks/XRS-audit.md) | `test_xrs.py` |
 
 ## 8. Priorita dalších oprav
 

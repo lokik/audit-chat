@@ -2,13 +2,13 @@
 
 **Aktualizace:** 13. listopadu 2026  
 **Revize podpory embeddingu a executable:** 18. listopadu 2026 (nativní zdroje SPR-KKR 9.7, `ase2sprkkr` větev `cluster`)  
-**Referenční funkční audit:** [Souhrnný audit SPR-KKR 9.7 a ASE2SPRKKR](../SPRKKR-ASE2SPRKKR-common-audit.md) (9. listopadu 2026) a navazující jednotlivé audity.  
+**Referenční funkční audit:** [Souhrnný audit SPR-KKR 9.7 a ASE2SPRKKR](SPRKKR-ASE2SPRKKR-common-audit.md) (9. listopadu 2026) a navazující jednotlivé audity.  
 **Základ implementace:** veřejné zdroje SPR-KKR 9.7 `PUB9.7_260420_18h13`; referenční funkční audit kontroloval ASE2SPRKKR `develop` na `49d7d0f1254dbc98cd7ae9a483b28747ddbe9bf6`. Aktuální registry, schémata a některé souborové kontrakty jsem navíc ověřil vůči `develop` `8aa03363433b45b98e2594bfaecc7578a46be94c` (12. listopadu 2026). **Celá testovací sada nebyla nad novější revizí znovu spuštěna.**  
 **Podklad manuálu:** veřejný SPR-KKR User's Guide (starší verze 8.6 použitá v původním auditu); zařazení parametrů je **předběžné**, pokud jednotlivý audit neodkazuje přímo na odpovídající část manuálu.
 
 ## Účel a interpretace
 
-Jde o **audit rozhraní ASE2SPRKKR**, který doplňuje existující [audit zdrojových chyb a funkcionality](../SPRKKR-ASE2SPRKKR-common-audit.md), nikoli jej nahrazuje. U každého tasku uvádí účel, stručné omezení, soubory, task-specifické parametry a jejich pokrytí dostupným manuálem. Detailní rozbor chyb zůstává v odkazovaných podkladech.
+Jde o **audit rozhraní ASE2SPRKKR**, který doplňuje existující [audit zdrojových chyb a funkcionality](SPRKKR-ASE2SPRKKR-common-audit.md), nikoli jej nahrazuje. U každého tasku uvádí účel, stručné omezení, soubory, task-specifické parametry a jejich pokrytí dostupným manuálem. Detailní rozbor chyb zůstává v odkazovaných podkladech.
 
 - **Seznam:** 56 položek včetně `BSF`, což je pouze **schéma**, nikoli samostatně registrovaný task; referenční audit uvádí **55 registrovaných identit**. `BSFEK`/`BSFKK` sdílejí schéma BSF, `DMI` má vlastní identitu se schématem JXC. Nezaregistrované nativní názvy (např. BIS, SIGMA-XAS) jsou vysvětlené ve funkčním auditu, nikoli předstírané jako spustitelné tasky.
 - **Vstupní soubory:** běžně jde o generovaný SPR-KKR vstup (standardní vstup procesu) a potenciál z `CONTROL.POTFIL`. Rozlišuji externí povinné soubory, volitelnou cache a pomocné soubory pro historické formáty. Umístění TAU cache může záviset na `TAUDIR`/`TAUPATH`.
@@ -117,7 +117,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_aes.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [AES](AES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [AES](tasks/AES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### AIPES
 
@@ -135,7 +135,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_aipes.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `SPEC` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [AIPES](AIPES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [AIPES](tasks/AIPES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### APS
 
@@ -153,7 +153,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_aps.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [APS](APS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [APS](tasks/APS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### ARPES
 
@@ -171,7 +171,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_arpes_audit.py`, `src/ase2sprkkr/input_parameters/test/test_arpes_energy.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `ARPES` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [ARPES](ARPES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [ARPES](tasks/ARPES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BAND
 
@@ -189,7 +189,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_band.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `SPEC` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [BAND](BAND-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [BAND](tasks/BAND-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BONDING
 
@@ -207,7 +207,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_bonding.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [BONDING](BONDING-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [BONDING](tasks/BONDING-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSDOSIJ
 
@@ -225,7 +225,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_bsdosij.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [BSDOSIJ](BSDOSIJ-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [BSDOSIJ](tasks/BSDOSIJ-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSF
 
@@ -244,7 +244,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `BSF` deklarovaný taskem (samotné parsování není fyzikální ověření).
 - **Detail rozhraní:** `BSF` je schéma, ne samostatně registrovaný task. Použij `InputParameters.for_task('BSFEK')` nebo `for_task('BSFKK')` (případně `for_definition('BSF')` pro schéma).
-- **Podrobný audit zdrojů/funkčnosti:** [BSF](BSF-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [BSF](tasks/BSF-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSFEK
 
@@ -263,7 +263,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `BSF` deklarovaný taskem (samotné parsování není fyzikální ověření).
 - **Detail rozhraní:** Samostatná registrovaná identita tasku; sdílí schéma BSF a režim E–k volí přes `ENERGY.NE`.
-- **Podrobný audit zdrojů/funkčnosti:** [BSF](BSF-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [BSF](tasks/BSF-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### BSFKK
 
@@ -282,7 +282,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `BSF` deklarovaný taskem (samotné parsování není fyzikální ověření).
 - **Detail rozhraní:** Samostatná registrovaná identita tasku; sdílí schéma BSF a režim k–k volí přes `ENERGY.NE`.
-- **Podrobný audit zdrojů/funkčnosti:** [BSF](BSF-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [BSF](tasks/BSF-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CHI
 
@@ -300,7 +300,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_chi.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [CHI](CHI-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [CHI](tasks/CHI-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CHILANDAU
 
@@ -318,7 +318,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_chilandau.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [CHILANDAU](CHILANDAU-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [CHILANDAU](tasks/CHILANDAU-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CHIXAS
 
@@ -336,7 +336,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_chixas.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [CHIXAS](CHIXAS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [CHIXAS](tasks/CHIXAS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CLPES
 
@@ -354,7 +354,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_clpes.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `ARPES` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [CLPES](CLPES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [CLPES](tasks/CLPES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### CLXPS
 
@@ -372,7 +372,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_clxps.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [CLXPS](CLXPS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [CLXPS](tasks/CLXPS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### COMPTON
 
@@ -390,7 +390,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_compton.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [COMPTON](COMPTON-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [COMPTON](tasks/COMPTON-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### DMI
 
@@ -409,7 +409,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `JXC` deklarovaný taskem (samotné parsování není fyzikální ověření).
 - **Detail rozhraní:** Sdílí schéma JXC, ale má vlastní registrovanou identitu tasku; čisté DMI a současné JXC+DMI nejsou ekvivalentní.
-- **Podrobný audit zdrojů/funkčnosti:** [DMI](DMI-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [DMI](tasks/DMI-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### DOS
 
@@ -427,7 +427,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_dos.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `DOS` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [DOS](DOS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [DOS](tasks/DOS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### EKREL
 
@@ -445,7 +445,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_ekrel.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [EKREL](EKREL-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [EKREL](tasks/EKREL-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### FMAG
 
@@ -463,7 +463,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_fmag.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [FMAG](FMAG-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [FMAG](tasks/FMAG-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### FSCAT
 
@@ -481,7 +481,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_fscat.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [FSCAT](FSCAT-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [FSCAT](tasks/FSCAT-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### GILBERT
 
@@ -500,7 +500,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
 - **Detail rozhraní:** Současná definice tasku povoluje MPI; to *není* důkaz ověřené numerické shody mezi sériovým a MPI během.
-- **Podrobný audit zdrojů/funkčnosti:** [GILBERT](GILBERT-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [GILBERT](tasks/GILBERT-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### JALF
 
@@ -518,7 +518,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_jalf.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [JALF](JALF-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [JALF](tasks/JALF-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### JORB
 
@@ -536,7 +536,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_jorb.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [JORB](JORB-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [JORB](tasks/JORB-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### JXC
 
@@ -554,7 +554,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_jxc.py`, `src/ase2sprkkr/input_parameters/test/test_jxc_definition.py`, `src/ase2sprkkr/input_parameters/test/test_exchange_file_manifests.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `JXC` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [JXC](JXC-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [JXC](tasks/JXC-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### MECHECK
 
@@ -572,7 +572,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_mecheck.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [MECHECK](MECHECK-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [MECHECK](tasks/MECHECK-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### MEPLOT
 
@@ -590,7 +590,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_meplot.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [MEPLOT](MEPLOT-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [MEPLOT](tasks/MEPLOT-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### NRAES
 
@@ -608,7 +608,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_nraes.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [NRAES](NRAES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [NRAES](tasks/NRAES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### NUCSSCPL
 
@@ -626,7 +626,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_scattering_file_manifests.py`, `src/ase2sprkkr/input_parameters/test/test_dataset_filenames.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [NUCSSCPL](NUCSSCPL-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [NUCSSCPL](tasks/NUCSSCPL-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### OPTABS
 
@@ -644,7 +644,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_optabs.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [OPTABS](OPTABS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [OPTABS](tasks/OPTABS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PHAGEN
 
@@ -662,7 +662,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_phagen.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Nativní integrační test exportu PHAGEN prošel pro konvergované Au a ověřil oba výstupní soubory; bez srovnání s MsSpec či fyzikálním benchmarkem.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [PHAGEN](PHAGEN-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PHAGEN](tasks/PHAGEN-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOT2DPOT
 
@@ -681,7 +681,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
 - **Detail rozhraní:** `TASK.AVEC/BVEC/DVEC` používají kartézské **jednotky ALAT**.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOT2D-selectors](PLOT2D-selectors-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOT2D-selectors](tasks/PLOT2D-selectors-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOT2DPR
 
@@ -700,7 +700,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
 - **Detail rozhraní:** `TASK.AVEC/BVEC/DVEC` jsou kartézské vektory v **jednotkách ALAT**, nikoli přímo v Bohrech nebo frakčních souřadnicích.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOT2DPR](PLOT2DPR-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOT2DPR](tasks/PLOT2DPR-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOT2DRHO
 
@@ -719,7 +719,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
 - **Detail rozhraní:** `TASK.AVEC/BVEC/DVEC` používají kartézské **jednotky ALAT**.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOT2D-selectors](PLOT2D-selectors-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOT2D-selectors](tasks/PLOT2D-selectors-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTPOT
 
@@ -737,7 +737,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`, `src/ase2sprkkr/input_parameters/test/test_plot_selector_file_manifests.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOT-selectors](PLOT-selectors-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOT-selectors](tasks/PLOT-selectors-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTPRS
 
@@ -755,7 +755,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOTPRS](PLOTPRS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOTPRS](tasks/PLOTPRS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTRHO
 
@@ -773,7 +773,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`, `src/ase2sprkkr/input_parameters/test/test_plot_selector_file_manifests.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOT-selectors](PLOT-selectors-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOT-selectors](tasks/PLOT-selectors-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PLOTSFN
 
@@ -791,7 +791,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_plotprs.py`, `src/ase2sprkkr/input_parameters/test/test_plot_selector_file_manifests.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [PLOT-selectors](PLOT-selectors-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PLOT-selectors](tasks/PLOT-selectors-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### POSANI
 
@@ -809,7 +809,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_posani.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [POSANI](POSANI-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [POSANI](tasks/POSANI-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### POSANIPREP
 
@@ -827,7 +827,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_posaniprep.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [POSANIPREP](POSANIPREP-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [POSANIPREP](tasks/POSANIPREP-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### POSANITAU
 
@@ -845,7 +845,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_posanitau.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [POSANITAU](POSANITAU-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [POSANITAU](tasks/POSANITAU-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### PSHIFT
 
@@ -863,7 +863,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_pshift.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [PSHIFT](PSHIFT-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [PSHIFT](tasks/PSHIFT-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SCF
 
@@ -881,7 +881,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_scf_audit.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `SCF` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [SCF](SCF-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [SCF](tasks/SCF-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SIGMA
 
@@ -899,7 +899,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_sigma.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [SIGMA](SIGMA-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [SIGMA](tasks/SIGMA-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SOCPAR
 
@@ -917,7 +917,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_socpar.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [SOCPAR](SOCPAR-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [SOCPAR](tasks/SOCPAR-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### SPLEED
 
@@ -935,7 +935,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_spleed.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** `SPEC` deklarovaný taskem (samotné parsování není fyzikální ověření).
-- **Podrobný audit zdrojů/funkčnosti:** [SPLEED](SPLEED-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [SPLEED](tasks/SPLEED-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### STONER
 
@@ -953,7 +953,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_stoner.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [STONER](STONER-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [STONER](tasks/STONER-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### T1
 
@@ -971,7 +971,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_t1.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [T1](T1-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [T1](tasks/T1-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### TDOBS
 
@@ -989,7 +989,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_tdobs.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [TDOBS](TDOBS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [TDOBS](tasks/TDOBS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### TORQUE
 
@@ -1007,7 +1007,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_torque.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [TORQUE](TORQUE-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [TORQUE](tasks/TORQUE-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### TUTORIAL
 
@@ -1025,7 +1025,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_tutorial.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [TUTORIAL](TUTORIAL-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [TUTORIAL](tasks/TUTORIAL-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### VBPES
 
@@ -1043,7 +1043,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_vbpes.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [VBPES](VBPES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [VBPES](tasks/VBPES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### WFPLOT
 
@@ -1061,7 +1061,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_wfplot.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [WFPLOT](WFPLOT-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [WFPLOT](tasks/WFPLOT-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### XAS
 
@@ -1079,7 +1079,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_xas.py`, `src/ase2sprkkr/input_parameters/test/test_xas_definition.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [XAS](XAS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [XAS](tasks/XAS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### XES
 
@@ -1097,7 +1097,7 @@ Pro běžné výpočty se používá executable uvedený v registru tasků. Skut
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_xes.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [XES](XES-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [XES](tasks/XES-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
 ### XRS
 
@@ -1137,5 +1137,5 @@ These are not counted among the 56 user-facing names above, but they are relevan
 - **Testy ASE2SPRKKR:** `src/ase2sprkkr/input_parameters/test/test_xrs.py`. Jde o **testy popsané v auditu z 9. 11. 2026**, nikoli nové spuštění nad aktuálním HEAD.
 - **Nativní/numerické ověření:** Referenční audit neprokazuje nezávislý numerický benchmark tohoto tasku. Python testy ani existence parseru nepotvrzují fyzikální správnost.
 - **Strukturovaný reader výsledků:** Samostatný reader zde není doložen; log ani nativní soubory nejsou automaticky validovanými strukturovanými výsledky.
-- **Podrobný audit zdrojů/funkčnosti:** [XRS](XRS-audit.md); [souhrnný zdrojový audit](../SPRKKR-ASE2SPRKKR-common-audit.md).
+- **Podrobný audit zdrojů/funkčnosti:** [XRS](tasks/XRS-audit.md); [souhrnný zdrojový audit](SPRKKR-ASE2SPRKKR-common-audit.md).
 
