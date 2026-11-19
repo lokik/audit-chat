@@ -9,6 +9,13 @@ These two complementary task-by-task inventories cover **56 headings** (55 regis
 - [English — ASE2SPRKKR task interface audit](audits/english/ASE2SPRKKR-task-interface-audit.md)
 - [Česky — audit rozhraní tasků ASE2SPRKKR](audits/czech/ASE2SPRKKR-task-interface-audit.md)
 
+## Native 2D applicability (19 November 2026)
+
+The source-level task audit distinguishes genuine `SYSTEM_DIMENSION=2D` from 3D supercells or 2D plot output, provides a 56-heading yes/no matrix with parameter restrictions, and identifies 3D-capable tasks excluded from standard 2D workflows (`POSANIPREP`, `POSANITAU`, `CHILANDAU`, and the dependent `POSANI` workflow).
+
+- [English — native 2D task applicability audit](audits/english/SPRKKR-2D-task-applicability.md)
+- [Česky — podpora nativní 2D geometrie](audits/czech/SPRKKR-2D-task-applicability.md)
+
 ## Native functionality, limitations and bug evidence
 
 - [English — consolidated SPR-KKR 9.7 / ASE2SPRKKR source audit](audits/english/SPRKKR-ASE2SPRKKR-common-audit.md) — native capabilities, limitations and verification.
