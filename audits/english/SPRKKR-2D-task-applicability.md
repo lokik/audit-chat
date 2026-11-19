@@ -107,3 +107,6 @@ class SystemKind(StrEnum):
 # CHILANDAU: supports={"3d"}
 # A separate validator checks task/parameter combinations.
 ```
+
+
+The free non-embedded cluster dimension is assessed separately in the [0D free-cluster audit](SPRKKR-0D-free-cluster-task-applicability.md); `TAU.CLUSTER` alone is not equivalent to the molecular `TAU.MOL` route.

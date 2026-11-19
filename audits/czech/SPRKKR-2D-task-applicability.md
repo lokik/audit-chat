@@ -117,3 +117,6 @@ class SystemKind(StrEnum):
 # CHILANDAU: supports={"3d"}            # nikoli "2d"
 # Konkrétní zákazy kombinací ověřuje validator.
 ```
+
+
+Podpora volného clusteru bez host potenciálu je vyhodnocena samostatně v [0D auditu](SPRKKR-0D-free-cluster-task-applicability.md). Samotné `TAU.CLUSTER` není ekvivalent molekulárního `TAU.MOL`.

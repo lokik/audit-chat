@@ -16,6 +16,13 @@ The source-level task audit distinguishes genuine `SYSTEM_DIMENSION=2D` from 3D 
 - [English — native 2D task applicability audit](audits/english/SPRKKR-2D-task-applicability.md)
 - [Česky — podpora nativní 2D geometrie](audits/czech/SPRKKR-2D-task-applicability.md)
 
+## Native free 0D cluster applicability (19 November 2026)
+
+A separate 56-heading yes/no audit addresses a **free finite cluster with no host potential** (`TAU.MOL`), distinct from both `TAU.CLUSTER` as a periodic-cluster approximation and the `embscf`/`embgen` host-potential workflow. The assessment separates actual molecular calculations from local potential-only postprocessing and does not claim new native numerical validation. **19 yes / 37 no** under the audited restrictions.
+
+- [English — native free 0D cluster task applicability](audits/english/SPRKKR-0D-free-cluster-task-applicability.md)
+- [Česky — podpora volného 0D clusteru bez embeddingu](audits/czech/SPRKKR-0D-free-cluster-task-applicability.md)
+
 ## Native functionality, limitations and bug evidence
 
 - [English — consolidated SPR-KKR 9.7 / ASE2SPRKKR source audit](audits/english/SPRKKR-ASE2SPRKKR-common-audit.md) — native capabilities, limitations and verification.
